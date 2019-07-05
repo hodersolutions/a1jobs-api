@@ -33,10 +33,10 @@ def create_app(config_class=config.DefaultConfig):
     cors.init_app(app)
     jwt.init_app(app)
 
-    from users.routes import users
+    from logins.routes import logins
     from main.routes import main
 
-    app.register_blueprint(users)
+    app.register_blueprint(logins)
     app.register_blueprint(main)
 
     return app

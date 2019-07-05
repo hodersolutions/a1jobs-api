@@ -16,10 +16,10 @@ from models.user_registrations import UserLogin
 from flask_jwt_extended import (create_refresh_token, jwt_refresh_token_required)
 
 
-users = Blueprint('users', __name__)
+logins = Blueprint('logins', __name__)
 
 
-@users.route('/register', methods=["POST"])
+@logins.route('/register', methods=["POST"])
 @validate.login
 def register():
     request_data = request.get_json()
@@ -77,7 +77,7 @@ def register():
     return Response({h:'hhf'}, 501, mimetype='application/json')
 
 
-@users.route('/login', methods=["POST"])
+@logins.route('/login', methods=["POST"])
 @validate.login
 def login():
     request_data = request.get_json()
@@ -100,7 +100,7 @@ def login():
     return Response(dumps(result), 401, mimetype="application/json")
 
 
-@users.route('/logout', methods=["POST"])
+@logins.route('/logout', methods=["POST"])
 @jwt_refresh_token_required
 def logout():
     result = {
