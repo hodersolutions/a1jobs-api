@@ -1,5 +1,5 @@
 ##########################################################################
-# Name:     Users Routes
+# Name:     login Routes
 # Purpose: File contains User request endpoints like register, login, logout etc.
 #
 # Author:     Siva Samudrala
@@ -11,8 +11,8 @@
 from flask import Blueprint
 from flask import Response, request
 from json import dumps
-from decorators import validate
-from models.user_registrations import UserLogin
+from logins.decorators import validate_login
+from logins.models import UserLogin
 from flask_jwt_extended import (create_refresh_token, jwt_refresh_token_required)
 
 
@@ -20,7 +20,7 @@ logins = Blueprint('logins', __name__)
 
 
 @logins.route('/register', methods=["POST"])
-@validate.login
+@validate_login
 def register():
     request_data = request.get_json()
     if "email" in request_data:
@@ -78,11 +78,23 @@ def register():
 
 
 @logins.route('/login', methods=["POST"])
-@validate.login
+@validate_login
 def login():
     request_data = request.get_json()
     if "email" in request_data:
         user = UserLogin.query.filter_by(email=request_data["email"]).first()
+        if user and user.verify_hash(request_data['password'], user.password):
+            access_token = create_refresh_token(identity=user.email)
+            result = {
+                'status': 'success',
+                'message': 'User logged in.',
+                'user': user.serialize(),
+                'access_token': access_token
+            }
+            response = Response(dumps(result), 200, mimetype='application/json')
+            return response
+    if "mobile" in request_data:
+        user = UserLogin.query.filter_by(mobile=request_data["mobile"]).first()
         if user and user.verify_hash(request_data['password'], user.password):
             access_token = create_refresh_token(identity=user.email)
             result = {

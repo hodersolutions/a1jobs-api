@@ -12,14 +12,14 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
-from main import config
+from config import DefaultConfig
 
 cors = CORS()
 db = SQLAlchemy()
 jwt = JWTManager()
 
 
-def create_app(config_class=config.DefaultConfig):
+def create_app(config_class=DefaultConfig):
     """
     Creates the app instance with its own config and other values.
     :param config_class:
@@ -27,7 +27,7 @@ def create_app(config_class=config.DefaultConfig):
     """
     app = Flask(__name__)
     # we need a .config file to store these values not a python class TODO
-    app.config.from_object(config.DefaultConfig)
+    app.config.from_object(DefaultConfig)
 
     db.init_app(app)
     cors.init_app(app)
@@ -35,8 +35,10 @@ def create_app(config_class=config.DefaultConfig):
 
     from logins.routes import logins
     from main.routes import main
+    from services.users.routes import users
 
     app.register_blueprint(logins)
     app.register_blueprint(main)
+    app.register_blueprint(users)
 
     return app
