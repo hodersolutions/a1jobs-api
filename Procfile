@@ -1,1 +1,1 @@
-web: gunicorn run:ic
+web: gunicorn run:application
