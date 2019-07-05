@@ -10,7 +10,7 @@
 ##########################################################################
 from main import *
 
-if __name__ == "__main__":
-    application = create_app()
 
+applicatio = create_app()
+if __name__ == "__main__":
     application.run(debug=True, port=5000)
