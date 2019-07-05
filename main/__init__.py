@@ -22,11 +22,11 @@ jwt = JWTManager()
 def create_app(config_class=config.DefaultConfig):
     """
     Creates the app instance with its own config and other values.
-    useful when we need different configs for dev, staging and production
     :param config_class:
     :return: app instance
     """
     app = Flask(__name__)
+    # we need a .config file to store these values not a python class TODO
     app.config.from_object(config.DefaultConfig)
 
     db.init_app(app)

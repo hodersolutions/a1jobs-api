@@ -8,7 +8,9 @@
 # Copyright:   (c) Hoder Solutions Pvt Ltd 2018 - Present
 # Licence:   <your licence>
 ##########################################################################
-from main import create_app
+from main import *
 
 if __name__ == "__main__":
-    create_app().run(debug=True, port=5000)
+    app = create_app()
+
+    app.run(debug=True, port=5000)

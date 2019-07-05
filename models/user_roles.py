@@ -22,7 +22,7 @@ from main import db
 class UserRoles(db.Model):
     __tablename__ = "user_roles"
 
-    user = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    user = db.Column(db.Integer, db.ForeignKey('user_login.id'), primary_key=True)
     role = db.Column(db.Integer, db.ForeignKey('roles.id'), primary_key=True)
 
     def __repr__(self):

@@ -12,7 +12,7 @@ from flask import Blueprint
 from flask import Response, request
 from json import dumps
 from decorators import validate
-from models.users import Users
+from models.user_registrations import UserLogin
 from flask_jwt_extended import (create_refresh_token, jwt_refresh_token_required)
 
 
@@ -24,17 +24,28 @@ users = Blueprint('users', __name__)
 def register():
     request_data = request.get_json()
     if "email" in request_data:
-        user = Users.get_user_by_email(request_data["email"])
+        user = UserLogin.get_user_by_email(request_data["email"])
         if user:
             result = {
                 'status': 'success',
                 'message': 'User Already exists with the email.',
-                'user': user
+                'user': user.serialize()
             }
             response = Response(dumps(result), 200, mimetype='application/json')
             return response
 
-    new_user = Users()
+    if "mobile" in request_data:
+        user = UserLogin.get_user_by_mobile(request_data["mobile"])
+        if user:
+            result = {
+                'status': 'success',
+                'message': 'User Already exists with the mobile.',
+                'user': user.serialize()
+            }
+            response = Response(dumps(result), 200, mimetype='application/json')
+            return response
+
+    new_user = UserLogin()
     if "email" in request_data:
         new_user.email = request_data["email"]
     if "password" in request_data:
@@ -44,7 +55,7 @@ def register():
 
     # role = request_data["role"]
     # success, error = users.Users.add_user(new_user, role)
-    success, error = Users.add_user(new_user)
+    success, error = UserLogin.add_user(new_user)
     response = None
     if success:
         result = {
@@ -53,15 +64,17 @@ def register():
             'user': success
         }
         response = Response(dumps(result), 201, mimetype='application/json')
+        return response
     if error:
         result = {
             'status': 'failure',
-            'message': 'Successfully registered.',
+            'message': 'Internal Error.',
             'user': {'msg': str(error)}
         }
         response = Response(dumps(result), 501, mimetype='application/json')
+        return response
 
-    return response
+    return Response({h:'hhf'}, 501, mimetype='application/json')
 
 
 @users.route('/login', methods=["POST"])
@@ -69,7 +82,7 @@ def register():
 def login():
     request_data = request.get_json()
     if "email" in request_data:
-        user = Users.query.filter_by(email=request_data["email"]).first()
+        user = UserLogin.query.filter_by(email=request_data["email"]).first()
         if user and user.verify_hash(request_data['password'], user.password):
             access_token = create_refresh_token(identity=user.email)
             result = {
