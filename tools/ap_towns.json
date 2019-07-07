@@ -1,0 +1,418 @@
+[
+  {
+    "town": "Anantapur",
+    "district": 1
+  },
+  {
+    "town": "Kakkalapalle",
+    "district": 1
+  },
+  {
+    "town": "Narayanapuram",
+    "district": 1
+  },
+  {
+    "town": "Papampeta",
+    "district": 1
+  },
+  {
+    "town": "Somandepalle",
+    "district": 1
+  },
+  {
+    "town": "Uravakonda",
+    "district": 1
+  },
+  {
+    "town": "Yenumalapalle",
+    "district": 1
+  },
+  {
+    "town": "Akkarampalle",
+    "district": 2
+  },
+  {
+    "town": "Avilala",
+    "district": 2
+  },
+  {
+    "town": "Cherlopalle",
+    "district": 2
+  },
+  {
+    "town": "Kuppam",
+    "district": 2
+  },
+  {
+    "town": "Mangalam",
+    "district": 2
+  },
+  {
+    "town": "Mangasamudram",
+    "district": 2
+  },
+  {
+    "town": "Murakambattu",
+    "district": 2
+  },
+  {
+    "town": "Narayanavanam",
+    "district": 2
+  },
+  {
+    "town": "Perur",
+    "district": 2
+  },
+  {
+    "town": "Pileru",
+    "district": 2
+  },
+  {
+    "town": "Renigunta",
+    "district": 2
+  },
+  {
+    "town": "Tiruchanur",
+    "district": 2
+  },
+  {
+    "town": "Tirumala",
+    "district": 2
+  },
+  {
+    "town": "Tirupati (NMA)",
+    "district": 2
+  },
+  {
+    "town": "Arempudi",
+    "district": 3
+  },
+  {
+    "town": "Bandarulanka",
+    "district": 3
+  },
+  {
+    "town": "Chidiga",
+    "district": 3
+  },
+  {
+    "town": "Morampudi",
+    "district": 3
+  },
+  {
+    "town": "Ramanayyapeta",
+    "district": 3
+  },
+  {
+    "town": "Rampachodavaram",
+    "district": 3
+  },
+  {
+    "town": "Suryaraopeta",
+    "district": 3
+  },
+  {
+    "town": "Vaddeswaram",
+    "district": 4
+  },
+  {
+    "town": "Chennamukkapalle",
+    "district": 5
+  },
+  {
+    "town": "Dommara Nandyala",
+    "district": 5
+  },
+  {
+    "town": "Gopavaram",
+    "district": 5
+  },
+  {
+    "town": "Mangampeta",
+    "district": 5
+  },
+  {
+    "town": "Modameedipalle",
+    "district": 5
+  },
+  {
+    "town": "Moragudi",
+    "district": 5
+  },
+  {
+    "town": "Muddanur",
+    "district": 5
+  },
+  {
+    "town": "Nagireddipalle",
+    "district": 5
+  },
+  {
+    "town": "Rameswaram",
+    "district": 5
+  },
+  {
+    "town": "Veparala",
+    "district": 5
+  },
+  {
+    "town": "Yerraguntla",
+    "district": 5
+  },
+  {
+    "town": "Guntupalli",
+    "district": 6
+  },
+  {
+    "town": "Ibrahimpatnam",
+    "district": 6
+  },
+  {
+    "town": "Kankipadu",
+    "district": 6
+  },
+  {
+    "town": "Kanuru",
+    "district": 6
+  },
+  {
+    "town": "Kondapalli",
+    "district": 6
+  },
+  {
+    "town": "Nadim Tiruvuru",
+    "district": 6
+  },
+  {
+    "town": "Poranki",
+    "district": 6
+  },
+  {
+    "town": "Prasadampadu",
+    "district": 6
+  },
+  {
+    "town": "Ramavarappadu",
+    "district": 6
+  },
+  {
+    "town": "Tadigadapa",
+    "district": 6
+  },
+  {
+    "town": "Yanamalakuduru",
+    "district": 6
+  },
+  {
+    "town": "Banaganapalle",
+    "district": 7
+  },
+  {
+    "town": "Banumukkala",
+    "district": 7
+  },
+  {
+    "town": "Bethamcherla",
+    "district": 7
+  },
+  {
+    "town": "Mamidalapadu",
+    "district": 7
+  },
+  {
+    "town": "Srisailam Project (RFC) Township",
+    "district": 7
+  },
+  {
+    "town": "Ramapuram",
+    "district": 7
+  },
+  {
+    "town": "Thummalamenta",
+    "district": 7
+  },
+  {
+    "town": "Buja Buja Nellore",
+    "district": 8
+  },
+  {
+    "town": "L.A. Sagaram",
+    "district": 8
+  },
+  {
+    "town": "Tada Khandrika",
+    "district": 8
+  },
+  {
+    "town": "Vinnamala",
+    "district": 8
+  },
+  {
+    "town": "Yerrabalem",
+    "district": 8
+  },
+  {
+    "town": "Chirala",
+    "district": 9
+  },
+  {
+    "town": "Cumbum",
+    "district": 9
+  },
+  {
+    "town": "Giddaluru",
+    "district": 9
+  },
+  {
+    "town": "Kanigiri",
+    "district": 9
+  },
+  {
+    "town": "Mulaguntapadu",
+    "district": 9
+  },
+  {
+    "town": "Pamur",
+    "district": 9
+  },
+  {
+    "town": "Podili",
+    "district": 9
+  },
+  {
+    "town": "Singarayakonda",
+    "district": 9
+  },
+  {
+    "town": "Vetapalem",
+    "district": 9
+  },
+  {
+    "town": "Balaga",
+    "district": 10
+  },
+  {
+    "town": "Hiramandalam",
+    "district": 10
+  },
+  {
+    "town": "Narasannapeta",
+    "district": 10
+  },
+  {
+    "town": "Ponduru",
+    "district": 10
+  },
+  {
+    "town": "Sompeta",
+    "district": 10
+  },
+  {
+    "town": "Tekkali",
+    "district": 10
+  },
+  {
+    "town": "Bowluvada",
+    "district": 11
+  },
+  {
+    "town": "Chodavaram",
+    "district": 11
+  },
+  {
+    "town": "Chintapalle",
+    "district": 11
+  },
+  {
+    "town": "Gudivada",
+    "district": 11
+  },
+  {
+    "town": "Kantabamsuguda",
+    "district": 11
+  },
+  {
+    "town": "Mulakuddu",
+    "district": 11
+  },
+  {
+    "town": "Nakkapalle",
+    "district": 11
+  },
+  {
+    "town": "Narsipatnam",
+    "district": 11
+  },
+  {
+    "town": "Peda Boddepalle",
+    "district": 11
+  },
+  {
+    "town": "Payakaraopeta",
+    "district": 11
+  },
+  {
+    "town": "Upper Sileru Project Site Camp",
+    "district": 11
+  },
+  {
+    "town": "Yelamanchili",
+    "district": 11
+  },
+  {
+    "town": "Cheepurupalle",
+    "district": 12
+  },
+  {
+    "town": "Chintalavalasa",
+    "district": 12
+  },
+  {
+    "town": "Gajapathinagaram",
+    "district": 12
+  },
+  {
+    "town": "Jarjapupeta",
+    "district": 12
+  },
+  {
+    "town": "Kanapaka",
+    "district": 12
+  },
+  {
+    "town": "Kothavalasa",
+    "district": 12
+  },
+  {
+    "town": "Malicherla",
+    "district": 12
+  },
+  {
+    "town": "Sriramnagar",
+    "district": 12
+  },
+  {
+    "town": "Tummikapalle",
+    "district": 12
+  },
+  {
+    "town": "Dwarakatirumala",
+    "district": 13
+  },
+  {
+    "town": "Gavaravaram",
+    "district": 13
+  },
+  {
+    "town": "Sanivarapupeta",
+    "district": 13
+  },
+  {
+    "town": "Satrampadu",
+    "district": 13
+  },
+  {
+    "town": "Tangellamudi",
+    "district": 13
+  }
+]

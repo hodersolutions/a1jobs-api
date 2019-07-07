@@ -1,6 +1,6 @@
 ##########################################################################
-# Name:     validate
-# Purpose: File contains all the decorators to validate the request
+# Name:     town Decorators
+# Purpose: File contains decorators for town validations and Authentications
 #
 # Author:     Siva Samudrala
 #
@@ -11,35 +11,29 @@
 from flask import request, Response
 from json import dumps
 from functools import wraps
-from roles.models import Roles
 
 
-def validate_role(func):
+def validate_town(func):
     """
-    The function should validate the user registration request
-    :param func:
-    :return: 400 and the error text
-    """
+        The function should validate the district registration request
+        :param func:
+        :return: 400 and the error text
+        """
+
     @wraps(func)
     def wrapper(*args, **kwargs):
         body = request.get_json()
-        if "keyword" not in body:
+        if "town" not in body:
             error = {
                 "status": "failure",
-                "message": "Bad Input, Please enter keyword."
+                "message": "Bad Input, Please enter valid town."
             }
             return Response(dumps(error), 400, mimetype="application/json")
-        if "keyword" in body and not body["keyword"]:
+        if "town" in body and not body["town"]:
             error = {
                 "status": "failure",
-                "message": "Bad Input, Please enter valid keyword."
+                "message": "Bad Input, Please enter valid town."
             }
             return Response(dumps(error), 400, mimetype="application/json")
-        if Roles.get_role(body["keyword"]):
-            result = {
-                "status": "success",
-                "message": "Role Already Exists."
-            }
-            return Response(dumps(result), 400, mimetype="application/json")
         return func(*args, **kwargs)
     return wrapper

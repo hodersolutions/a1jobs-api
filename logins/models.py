@@ -22,7 +22,7 @@ class UserLogin(db.Model):
     email = db.Column(db.String(80), nullable=True)
     # mobile number of the user
     mobile = db.Column(db.String(80), nullable=True)
-    # decrypted value
+    # encrypted value
     password = db.Column(db.String(80), nullable=False)
     # registration time
     registered_on = db.Column(db.DateTime, nullable=False, default=datetime.now())
@@ -86,7 +86,7 @@ class UserLogin(db.Model):
     def serialize(self):
         json_user = {
             "id": self.id,
-            "mobile": self.mobile,
+            # "mobile": self.mobile,
             "Email": self.email
             #"registered_on": str(self.registered_on),
         }
