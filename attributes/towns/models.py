@@ -14,8 +14,9 @@ from main import db
 class Towns(db.Model):
     __tablename__="towns"
     id = db.Column(db.Integer, primary_key=True)
-    district = db.Column(db.Integer)
     town = db.Column(db.String(200), nullable=False)
+    district = db.Column(db.Integer, db.ForeignKey('districts.id'))
+
 
     def __repr__(self):
         return '{"id":{0}, "town":{1}}'.format(self.id, self.town)

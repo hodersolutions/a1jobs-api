@@ -16,7 +16,11 @@ class Districts(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     district = db.Column(db.String(200), nullable=False)
-    state = db.Column(db.Integer)
+    state = db.Column(db.Integer, db.ForeignKey('states.id'))
+
+    # relationship variable, to list all the user_roles
+    towns = db.relationship('Towns', backref='enquiry', lazy=True)
+    institutions = db.relationship('Institutions', backref='enquiry', lazy=True)
 
     def __repr__(self):
         return '{"id":{0}, "district":{1}}'.format(self.id, self.district)
@@ -51,7 +55,9 @@ class Districts(db.Model):
     # todo:json encoding needed
     def serialize(self):
         json_district = {
-            'id' : self.id ,
-            'name' : self.district,
+            'id': self.id,
+            'name': self.district,
+            'towns': [town.serialize() for town in self.towns],
+            'Institutions': [institution.serialize() for institution in self.institutions]
         }
         return json_district

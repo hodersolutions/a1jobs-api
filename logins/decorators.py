@@ -22,22 +22,16 @@ def validate_login(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         body = request.get_json()
-        if "email" not in body and "mobile" not in body:
+        if "uid" not in body and "mobile" not in body:
             error = {
                 "status": "failure",
                 "message": "Bad Input, Please enter valid credentials."
             }
             return Response(dumps(error), 400, mimetype="application/json")
-        if "email" in body and not body["email"]:
+        if "uid" in body and not body["uid"]:
             error = {
                 "status": "failure",
-                "message": "Bad Input, Please enter valid email."
-            }
-            return Response(dumps(error), 400, mimetype="application/json")
-        if "mobile" in body and not body["mobile"]:
-            error = {
-                "status": "failure",
-                "message": "Bad Input, Please enter valid mobile."
+                "message": "Bad Input, Please enter valid uid."
             }
             return Response(dumps(error), 400, mimetype="application/json")
         if "password" in body and not body["password"]:

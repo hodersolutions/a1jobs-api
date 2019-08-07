@@ -14,7 +14,7 @@ from functools import wraps
 from services.users.models import Users
 
 
-def validate_registration(func):
+def validate_enrollment(func):
     """
     The function should validate the user registration request
     :param func:
@@ -44,7 +44,7 @@ def validate_registration(func):
             }
             return Response(dumps(error), 400, mimetype="application/json")
 
-        if "role" not in request.headers:
+        if "role_keyword" not in request.headers:
             error = {
                 "status": "failure",
                 "message": "Bad Input, Please enter valid role in header."

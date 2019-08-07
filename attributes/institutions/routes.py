@@ -17,7 +17,7 @@ from attributes.institutions.decorators import validate_institution
 institutions = Blueprint("institutions", __name__)
 
 
-@institutions.route("/institutions/all", methods=["GET"])
+@institutions.route("/api/v1/institutions/all", methods=["GET"])
 def api_institutions_all():
     result = {
         "status": "success",
@@ -27,7 +27,7 @@ def api_institutions_all():
     return Response(dumps(result), 200, mimetype='application/json')
 
 
-@institutions.route("/institutions", methods=["GET"])
+@institutions.route("/api/v1/institutions", methods=["GET"])
 def api_institutions():
     if 'id' in request.args:
         id = int(request.args['id'])
@@ -47,7 +47,7 @@ def api_institutions():
     return Response(dumps(result), 200, mimetype='application/json')
 
 
-@institutions.route("/institution/<int:id>", methods=["GET"])
+@institutions.route("/api/v1/institution/<int:id>", methods=["GET"])
 def api_institution_via_id(id):
     institution = Institutions.get_institution_from_id(id)
     if institution.id < 0:
@@ -64,7 +64,7 @@ def api_institution_via_id(id):
     return Response(dumps(result), 200, mimetype='application/json')
 
 
-@institutions.route("/institutions", methods=["POST"])
+@institutions.route("/api/v1/institutions", methods=["POST"])
 @validate_institution
 def api_add_institution():
     request_data = request.get_json()
@@ -83,7 +83,7 @@ def api_add_institution():
     return Response(dumps(result), 201, mimetype='application/json')
 
 
-@institutions.route("/institution/<int:id>", methods=["DELETE"])
+@institutions.route("/api/v1/institution/<int:id>", methods=["DELETE"])
 @validate_institution
 def api_delete_institution_via_id(id):
     institution = Institutions.delete_institution_from(id)

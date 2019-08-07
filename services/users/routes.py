@@ -12,16 +12,17 @@ from flask import Blueprint
 from flask import Response, request
 from json import dumps
 from services.users.models import Users
-from roles.models import UserRoles, Roles
-from services.users.decorators import validate_registration, validate_user_update
+from services.user_roles.models import UserRoles
+from attributes.roles.models import Roles
+from services.users.decorators import validate_enrollment, validate_user_update
 # from services.users.utils import add_user_and_role
-from flask_jwt_extended import (jwt_refresh_token_required, get_jwt_identity)
+from flask_jwt_extended import (jwt_refresh_token_required)
 
 
 users = Blueprint('users', __name__)
 
 
-@users.route("/users/all", methods=["GET"])
+@users.route("/api/v1/users/all", methods=["GET"])
 # @jwt_refresh_token_required
 def api_users_all():
     result = {
@@ -32,7 +33,7 @@ def api_users_all():
     return Response(dumps(result), 200, mimetype='application/json')
 
 
-@users.route("/users/filter", methods=["GET"])
+@users.route("/api/v1/users/filter", methods=["GET"])
 @jwt_refresh_token_required
 def api_users_filter():
     filter_dict = request.args.to_dict()
@@ -44,7 +45,7 @@ def api_users_filter():
     return Response(dumps(result), 200, mimetype='application/json')
 
 
-@users.route("/users/email", methods=["GET"])
+@users.route("/api/v1/users/email", methods=["GET"])
 @jwt_refresh_token_required
 def api_user_by_email():
     if 'email' in request.args:
@@ -73,7 +74,7 @@ def api_user_by_email():
     return Response(dumps(result), 200, mimetype='application/json')
 
 
-@users.route("/users/mobile", methods=["GET"])
+@users.route("/api/v1/users/mobile", methods=["GET"])
 @jwt_refresh_token_required
 def api_user_by_mobile():
     if 'mobile' in request.args:
@@ -102,7 +103,7 @@ def api_user_by_mobile():
     return Response(dumps(result), 200, mimetype='application/json')
 
 
-@users.route("/user/<int:uid>", methods=["GET"])
+@users.route("/api/v1/user/<int:uid>", methods=["GET"])
 @jwt_refresh_token_required
 def api_user_by_id(uid):
     user = Users.query.filter(ui=uid).first()
@@ -122,7 +123,7 @@ def api_user_by_id(uid):
     return Response(dumps(result), 200, mimetype='application/json')
 
 
-@users.route("/users/search/<string:text>", methods=["GET"])
+@users.route("/api/v1/users/search/<string:text>", methods=["GET"])
 @jwt_refresh_token_required
 def api_users_by_text(text):
     user_list = Users.get_users_from_text(text)
@@ -141,7 +142,7 @@ def api_users_by_text(text):
     return Response(dumps(result), 200, mimetype='application/json')
 
 
-@users.route("/users/email/exist", methods=["GET"])
+@users.route("/api/v1/users/email/exist", methods=["GET"])
 @jwt_refresh_token_required
 def api_user_by_email_exist():
     if 'email' in request.args:
@@ -168,13 +169,12 @@ def api_user_by_email_exist():
     return Response(dumps(result), 200, mimetype='application/json')
 
 
-@users.route("/user", methods=["POST"])
-@validate_registration
+@users.route("/api/v1/user", methods=["POST"])
+@validate_enrollment
 def api_add_user():
     request_data = request.get_json()
     if "uid" in request_data:
         user = Users.get_user_by_uid(request_data["uid"])
-        print(user)
         if user:
             result = {
                 'status': 'success',
@@ -223,7 +223,7 @@ def api_add_user():
     return Response({h: 'hhf'}, 501, mimetype='application/json')
 
 
-@users.route("/user", methods=["PUT"])
+@users.route("/api/v1/user", methods=["PUT"])
 @validate_user_update
 def api_update_user():
     request_data = request.get_json()
@@ -248,7 +248,7 @@ def api_update_user():
         result = {
             'status': 'success',
             'message': 'Successfully updated.',
-            'user': success
+            'user': user.serialize()
         }
         response = Response(dumps(result), 201, mimetype='application/json')
         return response

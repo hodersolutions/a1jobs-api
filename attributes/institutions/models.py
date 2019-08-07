@@ -14,7 +14,7 @@ from main import db
 class Institutions(db.Model):
     __tablename__ =  "institutions"
     id = db.Column(db.Integer, primary_key=True)
-    district = db.Column(db.Integer)
+    district = db.Column(db.Integer, db.ForeignKey('districts.id'))
     institution = db.Column(db.String(200), nullable=False)
 
     def __repr__(self):
@@ -52,5 +52,6 @@ class Institutions(db.Model):
         json_institution = {
             'id' : self.id ,
             'institution' : self.institution,
+            'district': self.district.serialize()
         }
         return json_institution

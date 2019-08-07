@@ -16,7 +16,7 @@ from json import dumps
 districts = Blueprint('districts', __name__)
 
 
-@districts.route("/districts/all", methods=["GET"])
+@districts.route("/api/v1/districts/all", methods=["GET"])
 def api_districts_all():
     result = {
         "status": "success",
@@ -26,7 +26,7 @@ def api_districts_all():
     return Response(dumps(result), 200, mimetype='application/json')
 
 
-@districts.route("/districts", methods=["GET"])
+@districts.route("/api/v1/districts", methods=["GET"])
 def api_districts():
     if 'id' in request.args:
         id = int(request.args['id'])
@@ -46,7 +46,7 @@ def api_districts():
     return Response(dumps(result), 200, mimetype='application/json')
 
 
-@districts.route("/district/<int:district_id>", methods=["GET"])
+@districts.route("/api/v1/district/<int:district_id>", methods=["GET"])
 def api_district_via_id(district_id):
     district = Districts.get_district_from_id(district_id)
     if district.id < 0:
@@ -63,7 +63,7 @@ def api_district_via_id(district_id):
     return Response(dumps(result), 200, mimetype='application/json')
 
 
-@districts.route("/district", methods=["POST"])
+@districts.route("/api/v1/district", methods=["POST"])
 @validate_district
 def api_add_district():
     request_data = request.get_json()

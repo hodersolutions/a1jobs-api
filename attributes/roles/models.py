@@ -30,7 +30,7 @@ class Roles(db.Model):
     description = db.Column(db.String(1000), nullable=True)
 
     # relationship variable, to list all the user_roles
-    users = db.relationship('UserRoles', backref='enquiry', lazy=True)
+    # role_users = db.relationship('UserRoles', backref='enquiry', lazy=True)
 
     def __repr__(self):
         return '{"id": {0}, "keyword": {1}, "id": {2}, "description": {3} }'.format(self.id, self.keyword, self.id,
@@ -78,26 +78,16 @@ class Roles(db.Model):
         json_role = {
             "id": self.id,
             "keyword": self.keyword,
-            "description": self.description
+            "description": self.description,
+            # "users": [role_user.users.serialize_without_role() for role_user in self.role_users]
         }
         return json_role
 
+    def serialize_without_users(self):
+        json_role = {
+            "id": self.id,
+            "keyword": self.keyword,
+            "description": self.description,
+        }
+        return json_role
 
-class UserRoles(db.Model):
-    __tablename__ = "user_roles"
-
-    user = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
-    role = db.Column(db.Integer, db.ForeignKey('roles.id'), primary_key=True)
-
-    def __repr__(self):
-        return '{"user": {0}, "role": {1}}'.format(self.user.Fullname(), self.role.description)
-
-    @classmethod
-    def add_user_role(cls, _user_role):
-        try:
-            db.session.add(_user_role)
-            db.session.commit()
-        except Exception as e:
-            return {'msg': e}
-
-        return None

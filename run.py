@@ -14,7 +14,7 @@ from tools import dbfill
 
 def init_db():
     db.create_all()
-    dbfill.fill_castes()
+    dbfill.fill_reservations()
     dbfill.fill_districts()
     dbfill.fill_institutions()
     dbfill.fill_religions()
@@ -23,13 +23,13 @@ def init_db():
     dbfill.fill_states()
     dbfill.fill_subjects()
     dbfill.fill_towns()
-    # dbfill.fill_user_roles()
     dbfill.fill_users()
+    dbfill.fill_user_roles()
 
 
 application = create_app()
-# with application.app_context():
-#     init_db()
+with application.app_context():
+    init_db()
 
 
 if __name__ == "__main__":

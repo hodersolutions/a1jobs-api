@@ -11,16 +11,16 @@
 from flask import Blueprint
 from flask import Response, request
 from json import dumps
-from roles.models import Roles
-from roles.decorators import validate_role
-from flask_jwt_extended import (jwt_refresh_token_required, get_jwt_identity)
+from attributes.roles.models import Roles
+from attributes.roles.decorators import validate_role
+from flask_jwt_extended import (jwt_refresh_token_required)
 
 
 roles = Blueprint('roles', __name__)
 
 
-@roles.route("/roles/all", methods=["GET"])
-@jwt_refresh_token_required
+@roles.route("/api/v1/roles/all", methods=["GET"])
+# @jwt_refresh_token_required
 def get_roles_all():
     result = {
         "status": "success",
@@ -30,7 +30,7 @@ def get_roles_all():
     return Response(dumps(result), 200, mimetype='application/json')
 
 
-@roles.route("/roles", methods=["POST"])
+@roles.route("/api/v1/roles", methods=["POST"])
 @jwt_refresh_token_required
 @validate_role
 def api_add_role():

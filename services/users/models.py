@@ -21,7 +21,7 @@ class Users(db.Model):
     # uid, can be student's enrollment id, staff's employee_id
     uid = db.Column(db.Integer, nullable=False)
     # institute id
-    uid = db.Column(db.Integer, nullable=False)
+    uid = db.Column(db.String(200), nullable=False)
     # encrypted value
     password = db.Column(db.String(200), nullable=True)
     # first name of a user
@@ -44,7 +44,7 @@ class Users(db.Model):
     details = db.Column(db.String(2000), nullable=True)
 
     # foreign key from the user_roles table
-    # roles_list = db.relationship('UserRoles', backref='enquiry', lazy=True)
+    user_roles = db.relationship('UserRoles', backref='enquiry', lazy=True)
 
     # foreign key from the user_details table
     # roles = db.relationship('UserDetails', backref='enquiry', lazy=True)
@@ -154,7 +154,20 @@ class Users(db.Model):
             "Email": self.email,
             # "registered_on": str(self.registered_on),
             "Fullname": self.fullname(),
-            "details": self.details
+            "details": self.details,
+            "roles": [user_role.roles.serialize_without_users() for user_role in self.user_roles]
+        }
+        return json_user
+
+    def serialize_without_roles(self):
+        json_user = {
+            "id": self.id,
+            "uid": self.uid,
+            "mobile": self.mobile,
+            "Email": self.email,
+            # "registered_on": str(self.registered_on),
+            "Fullname": self.fullname(),
+            "details": self.details,
         }
         return json_user
 

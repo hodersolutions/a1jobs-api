@@ -18,7 +18,7 @@ from attributes.states.decorators import validate_state
 states = Blueprint("states", __name__)
 
 
-@states.route("/states/all", methods=["GET"])
+@states.route("/api/v1/states/all", methods=["GET"])
 def api_states_all():
     result = {
         "status": "success",
@@ -28,7 +28,7 @@ def api_states_all():
     return Response(dumps(result), 200, mimetype='application/json')
 
 
-@states.route("/states", methods=["GET"])
+@states.route("/api/v1/states", methods=["GET"])
 def api_states():
     if 'id' in request.args:
         id = int(request.args['id'])
@@ -48,7 +48,7 @@ def api_states():
     return Response(dumps(result), 200, mimetype='application/json')
 
 
-@states.route("/state/<int:id>", methods=["GET"])
+@states.route("/api/v1/state/<int:id>", methods=["GET"])
 def api_state_via_id(id):
     state = States.get_state_from_id(id)
     if state.id < 0:
@@ -65,7 +65,7 @@ def api_state_via_id(id):
     return Response(dumps(result), 200, mimetype='application/json')
 
 
-@states.route("/states", methods=["POST"])
+@states.route("/api/v1/states", methods=["POST"])
 @validate_state
 def api_add_state():
     request_data = request.get_json()

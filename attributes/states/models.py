@@ -16,6 +16,8 @@ class States(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     state = db.Column(db.String(200), nullable=False)
+    # relationship variable, to list all the user_roles
+    districts = db.relationship('Districts', backref='enquiry', lazy=True)
 
     def __repr__(self):
         return '{"id":{0}, "state":{1}}'.format(self.id, self.state)
@@ -50,7 +52,8 @@ class States(db.Model):
     # todo:json encoding needed
     def serialize(self):
         json_state = {
-            'id' : self.id ,
-            'state' : self.state,
+            'id': self.id ,
+            'state': self.state,
+            'districts': [district.serialize() for district in self.districts]
         }
         return json_state

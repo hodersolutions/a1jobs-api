@@ -7,7 +7,7 @@ from json import dumps
 towns = Blueprint("towns", __name__)
 
 
-@towns.route("/towns/all", methods=["GET"])
+@towns.route("/api/v1/towns/all", methods=["GET"])
 def api_towns_all():
     result = {
         "status": "success",
@@ -17,7 +17,7 @@ def api_towns_all():
     return Response(dumps(result), 200, mimetype='application/json')
 
 
-@towns.route("/towns", methods=["GET"])
+@towns.route("/api/v1/towns", methods=["GET"])
 def api_towns():
     if 'id' in request.args:
         id = int(request.args['id'])
@@ -37,7 +37,7 @@ def api_towns():
     return Response(dumps(result), 200, mimetype='application/json')
 
 
-@towns.route("/town/<int:id>", methods=["GET"])
+@towns.route("/api/v1/town/<int:id>", methods=["GET"])
 def api_town_via_id(id):
     town = Towns.get_town_from_id(id)
     if town.id < 0:
@@ -54,7 +54,7 @@ def api_town_via_id(id):
     return Response(dumps(result), 200, mimetype='application/json')
 
 
-@towns.route("/towns", methods=["POST"])
+@towns.route("/api/v1/towns", methods=["POST"])
 @validate_town
 def api_add_town():
     request_data = request.get_json()

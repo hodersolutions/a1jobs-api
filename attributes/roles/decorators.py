@@ -1,6 +1,6 @@
 ##########################################################################
-# Name:     caste Decorators
-# Purpose: File contains decorators for caste validations and Authentications
+# Name:     validate
+# Purpose: File contains all the decorators to validate the request
 #
 # Author:     Siva Samudrala
 #
@@ -11,29 +11,35 @@
 from flask import request, Response
 from json import dumps
 from functools import wraps
+from attributes.roles.models import Roles
 
 
-def validate_caste(func):
+def validate_role(func):
     """
-        The function should validate the district registration request
-        :param func:
-        :return: 400 and the error text
-        """
-
+    The function should validate the user registration request
+    :param func:
+    :return: 400 and the error text
+    """
     @wraps(func)
     def wrapper(*args, **kwargs):
         body = request.get_json()
-        if "caste" not in body:
+        if "keyword" not in body:
             error = {
                 "status": "failure",
-                "message": "Bad Input, Please enter valid caste."
+                "message": "Bad Input, Please enter keyword."
             }
             return Response(dumps(error), 400, mimetype="application/json")
-        if "caste" in body and not body["caste"]:
+        if "keyword" in body and not body["keyword"]:
             error = {
                 "status": "failure",
-                "message": "Bad Input, Please enter valid caste."
+                "message": "Bad Input, Please enter valid keyword."
             }
             return Response(dumps(error), 400, mimetype="application/json")
+        if Roles.get_role(body["keyword"]):
+            result = {
+                "status": "success",
+                "message": "Role Already Exists."
+            }
+            return Response(dumps(result), 400, mimetype="application/json")
         return func(*args, **kwargs)
     return wrapper

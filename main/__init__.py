@@ -33,7 +33,7 @@ def create_app(config_class=DefaultConfig):
     cors.init_app(app)
     jwt.init_app(app)
 
-    from attributes.castes.routes import castes
+    from attributes.reservations.routes import reservations
     from attributes.religions.routes import religions
     from attributes.subjects.routes import subjects
     from attributes.institutions.routes import institutions
@@ -42,15 +42,17 @@ def create_app(config_class=DefaultConfig):
     from attributes.states.routes import states
     from attributes.standards.routes import standards
     from logins.routes import logins
+    from config.routes import config
     from main.routes import main
-    from roles.routes import roles
+    from attributes.roles.routes import roles
     from services.users.routes import users
 
+    app.register_blueprint(config)
     app.register_blueprint(logins)
     app.register_blueprint(main)
     app.register_blueprint(roles)
     app.register_blueprint(users)
-    app.register_blueprint(castes)
+    app.register_blueprint(reservations)
     app.register_blueprint(religions)
     app.register_blueprint(subjects)
     app.register_blueprint(institutions)
@@ -59,5 +61,6 @@ def create_app(config_class=DefaultConfig):
     app.register_blueprint(states)
     app.register_blueprint(users)
     app.register_blueprint(standards)
+
 
     return app

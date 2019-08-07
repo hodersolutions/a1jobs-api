@@ -18,7 +18,7 @@ from attributes.religions.decorators import validate_religion
 religions = Blueprint("religions", __name__)
 
 
-@religions.route("/religions/all", methods=["GET"])
+@religions.route("/api/v1/religions/all", methods=["GET"])
 def api_religions_all():
     result = {
         "status": "success",
@@ -28,7 +28,7 @@ def api_religions_all():
     return Response(dumps(result), 200, mimetype='application/json')
 
 
-@religions.route("/religions", methods=["GET"])
+@religions.route("/api/v1/religions", methods=["GET"])
 def api_religions():
     if 'id' in request.args:
         id = int(request.args['id'])
@@ -48,7 +48,7 @@ def api_religions():
     return Response(dumps(result), 200, mimetype='application/json')
 
 
-@religions.route("/religion/<int:id>", methods=["GET"])
+@religions.route("/api/v1/religion/<int:id>", methods=["GET"])
 def api_religion_via_id(id):
     religion = Religions.get_religion_from_id(id)
     if religion.id < 0:
@@ -65,7 +65,7 @@ def api_religion_via_id(id):
     return Response(dumps(result), 200, mimetype='application/json')
 
 
-@religions.route("/religions", methods=["POST"])
+@religions.route("/api/v1/religions", methods=["POST"])
 @validate_religion
 def api_add_religion():
     request_data = request.get_json()

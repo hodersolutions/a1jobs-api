@@ -18,7 +18,7 @@ from attributes.standards.decorators import validate_standard
 standards = Blueprint("standards", __name__)
 
 
-@standards.route("/standards/all", methods=["GET"])
+@standards.route("/api/v1/standards/all", methods=["GET"])
 def api_standards_all():
     result = {
         "status": "success",
@@ -28,7 +28,7 @@ def api_standards_all():
     return Response(dumps(result), 200, mimetype='application/json')
 
 
-@standards.route("/standards", methods=["GET"])
+@standards.route("/api/v1/standards", methods=["GET"])
 def api_standards():
     if 'id' in request.args:
         id = int(request.args['id'])
@@ -48,7 +48,7 @@ def api_standards():
     return Response(dumps(result), 200, mimetype='application/json')
 
 
-@standards.route("/standard/<int:id>", methods=["GET"])
+@standards.route("/api/v1/standard/<int:id>", methods=["GET"])
 def api_standard_via_id(id):
     standard = Standards.get_standard_from_id(id)
     if standard.id < 0:
@@ -65,7 +65,7 @@ def api_standard_via_id(id):
     return Response(dumps(result), 200, mimetype='application/json')
 
 
-@standards.route("/standards", methods=["POST"])
+@standards.route("/api/v1/standards", methods=["POST"])
 @validate_standard
 def api_add_standard():
     request_data = request.get_json()

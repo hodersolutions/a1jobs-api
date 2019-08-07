@@ -18,7 +18,7 @@ from attributes.subjects.decorators import validate_subject
 subjects = Blueprint("subjects", __name__)
 
 
-@subjects.route("/subjects/all", methods=["GET"])
+@subjects.route("/api/v1/subjects/all", methods=["GET"])
 def api_subjects_all():
     result = {
         "status": "success",
@@ -28,7 +28,7 @@ def api_subjects_all():
     return Response(dumps(result), 200, mimetype='application/json')
 
 
-@subjects.route("/subjects", methods=["GET"])
+@subjects.route("/api/v1/subjects", methods=["GET"])
 def api_subjects():
     if 'id' in request.args:
         id = int(request.args['id'])
@@ -48,7 +48,7 @@ def api_subjects():
     return Response(dumps(result), 200, mimetype='application/json')
 
 
-@subjects.route("/subject/<int:id>", methods=["GET"])
+@subjects.route("/api/v1/subject/<int:id>", methods=["GET"])
 def api_subject_via_id(id):
     subject = Subjects.get_subject_from_id(id)
     if subject.id < 0:
@@ -65,7 +65,7 @@ def api_subject_via_id(id):
     return Response(dumps(result), 200, mimetype='application/json')
 
 
-@subjects.route("/subjects", methods=["POST"])
+@subjects.route("/api/v1/subjects", methods=["POST"])
 @validate_subject
 def api_add_subject():
     request_data = request.get_json()
