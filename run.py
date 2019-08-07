@@ -28,8 +28,8 @@ def init_db():
 
 
 application = create_app()
-with application.app_context():
-    init_db()
+# with application.app_context():
+#     init_db()
 
 
 if __name__ == "__main__":
