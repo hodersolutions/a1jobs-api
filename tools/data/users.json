@@ -1,22 +1,22 @@
 [
   {
-    "uid" : "1",
+    "uid" : "admin",
     "email" : "vanvia-admin@vanvia.com"
   },
   {
-    "uid" : "2",
+    "uid" : "staff",
     "email" : "vanvia-staff@vanvia.com"
   },
   {
-    "uid" : "3",
+    "uid" : "principal",
     "email" : "vanvia-principal@vanvia.com"
   },
   {
-    "uid" : "4",
+    "uid" : "student",
     "email" : "vanvia-student@vanvia.com"
   },
   {
-    "uid" : "5",
+    "uid" : "parent",
     "email" : "vanvia-parent@vanvia.com"
   }
 ]
