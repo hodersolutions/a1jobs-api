@@ -27,7 +27,7 @@ class DefaultConfig:
 
     menu = {
         "student" : {
-            "Academics" : {
+            "academics" : {
                 "assignments" : "Assignments",
                 "timetable" : "Time Table",
                 "notebook": "Notebook",
@@ -40,18 +40,18 @@ class DefaultConfig:
                 "feedback" : "Feedback",
                 "syllabus" : "Syllabus"
             },
-            "Finance" : {
+            "finance" : {
                 "fees" : "Fees",
                 "transport" : "Transport Bills",
                 "reimbursements" : "Re-Imbursements"
             },
-            "Facilities" : {
+            "facilities" : {
                 "e-library" : "Library",
                 "inventory" : "Inventory",
                 "transport" : "Transport",
                 "extracurricular" : "Extra Curricular"
             },
-            "Media" : {
+            "media" : {
                 "events" : "Events",
                 "alumni" : "Alumni",
                 "newsletters" : "News Letters",
@@ -60,7 +60,7 @@ class DefaultConfig:
             }
         },
         "staff" : {
-            "Work" : {
+            "work" : {
                 "timetable" : "Time Table",
                 "assignments" : "Assignments",
                 "attendance" : "Attendance",
@@ -70,19 +70,19 @@ class DefaultConfig:
                 "competitions" : "Competitions",
                 "ptc" : "Parent Teacher Incidents"
             },
-            "Finance": {
+            "finance": {
                 "salary": "Salary",
                 "transport": "Transport Bills",
                 "expenses": "Expenses",
                 "funds": "Funds"
             },
-            "Facilities": {
+            "facilities": {
                 "e-library": "Library",
                 "inventory": "Inventory",
                 "transport": "Transport",
                 "extracurricular": "Extra Curricular"
             },
-            "Media": {
+            "media": {
                 "events": "Events",
                 "alumni": "Alumni",
                 "newsletters": "News Letters",
@@ -93,7 +93,7 @@ class DefaultConfig:
             }
         },
         "parent" : {
-            "Academics": {
+            "academics": {
                 "assignments": "Assignments",
                 "ptc": "Incidents",
                 "timetable": "Time Table",
@@ -107,18 +107,18 @@ class DefaultConfig:
                 "feedback": "Feedback",
                 "syllabus": "Syllabus"
             },
-            "Finance": {
+            "finance": {
                 "fees": "Fees",
                 "transport": "Transport Bills",
                 "reimbursements": "Re-Imbursements"
             },
-            "Facilities": {
+            "facilities": {
                 "e-library": "Library",
                 "inventory": "Inventory",
                 "transport": "Transport",
                 "extracurricular": "Extra Curricular"
             },
-            "Media": {
+            "media": {
                 "events": "Events",
                 "alumni": "Alumni",
                 "newsletters": "News Letters",
@@ -174,18 +174,18 @@ class DefaultConfig:
                 "syllabus": "Syllabus",
 
             },
-            "Finance": {
+            "finance": {
                 "fees": "Fees",
                 "transport": "Transport Bills",
                 "reimbursements": "Re-Imbursements"
             },
-            "Facilities": {
+            "facilities": {
                 "e-library": "Library",
                 "inventory": "Inventory",
                 "transport": "Transport",
                 "extracurricular": "Extra Curricular"
             },
-            "Media": {
+            "media": {
                 "events": "Events",
                 "alumni": "Alumni",
                 "newsletters": "News Letters",
@@ -328,10 +328,7 @@ class DefaultConfig:
             "student" : "1=0",
             "staff" : "1=0",
             "principal": "uid = {}"
-
-
         }
-
     }
 
     def __init__(self):
@@ -396,4 +393,3 @@ class ProductionConfig(DefaultConfig):
 
     def __init__(self):
         pass
-
