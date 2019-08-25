@@ -153,7 +153,7 @@ class DefaultConfig:
         },
         "admin": {
             "staff": {
-                "create": "Enrollment",
+                "create-staff": "Enrollment",
                 "timetable": "Time Table",
                 "attendance": "Attendance",
                 "courses": "Courses",
@@ -163,7 +163,7 @@ class DefaultConfig:
                 "ptc": "Parent Teacher Incidents"
             },
             "students": {
-                "create": "Enrollment",
+                "create-student": "Enrollment",
                 "performance": "Grades",
                 "exams": "Exams",
                 "attendance": "Attendance",
