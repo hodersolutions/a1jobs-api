@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /home/ubuntu/vanvia-api
+    destination: /home/ubuntu/a1jobs-api
 hooks:
   AfterInstall:
     - location: scripts/install_dependencies

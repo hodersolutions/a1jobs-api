@@ -18,38 +18,42 @@ from flask_jwt_extended import (create_refresh_token, jwt_refresh_token_required
 
 logins = Blueprint('logins', __name__)
 
-
 @logins.route('/api/v1/register', methods=["POST"])
 @validate_login
 def register():
     request_data = request.get_json()
-    if "uid" in request_data:
-        new_user = Users.get_user_by_uid(request_data["uid"])
-        if not new_user:
-            result = {
-                'status': 'failure',
-                'message': 'User Enrollment not done, please contact your Administrator.',
-            }
-            response = Response(dumps(result), 400, mimetype='application/json')
-            return response
-
-        if new_user.password:
+    if "email" in request_data:
+        user = Users.get_user_by_email(request_data["email"])
+        if user:
             result = {
                 'status': 'success',
-                'message': 'User already registered.',
+                'message': 'User Already exists with the Email.',
+                'user': user.serialize()
+            }
+            response = Response(dumps(result), 200, mimetype='application/json')
+            return response
+    if "mobile" in request_data:
+        user = Users.get_user_by_mobile(request_data["mobile"])
+        if user:
+            result = {
+                'status': 'success',
+                'message': 'User Already exists with the Mobile.',
+                'user': user.serialize()
             }
             response = Response(dumps(result), 200, mimetype='application/json')
             return response
 
-    if "uid" in request_data:
-        new_user.uid = request_data["uid"]
+    new_user = Users()
+
+    if "email" in request_data:
+        new_user.email = request_data["email"]
+    if "mobile" in request_data:
+        new_user.mobile = request_data["mobile"]
     if "password" in request_data:
-        new_user.password = request_data["password"]
-        new_user.password = Users.generate_hash(new_user.password)
+        new_user.password = Users.generate_hash(request_data["password"])
+    # new_user.created_user = get_jwt_identity().id
 
-
-    success, error = new_user.update_user()
-    response = None
+    success, error = Users.add_user(new_user)
     if success:
         result = {
             'status': 'success',
@@ -67,33 +71,36 @@ def register():
         response = Response(dumps(result), 501, mimetype='application/json')
         return response
 
-    return Response({h:'hhf'}, 501, mimetype='application/json')
+    return Response({h: 'hhf'}, 501, mimetype='application/json')
 
 
 @logins.route('/api/v1/login', methods=["POST"])
 @validate_login
 def login():
     request_data = request.get_json()
-    if "uid" in request_data:
-        user = Users.query.filter_by(uid=request_data["uid"]).first()
-        if not user.password:
-            result = {
-                'status': 'failure',
-                'message': 'User is not registered.'
-            }
-            response = Response(dumps(result), 404, mimetype='application/json')
-            return response
+    user = None
+    if "email" in request_data:
+        user = Users.query.filter_by(email=request_data["email"]).first()
+    elif "mobile" in request_data:
+        user = Users.query.filter_by(email=request_data["mobile"]).first()
+    if not user or not user.password:
+        result = {
+            'status': 'failure',
+            'message': 'User is not registered.'
+        }
+        response = Response(dumps(result), 404, mimetype='application/json')
+        return response
 
-        if user and user.verify_hash(request_data['password'], user.password):
-            access_token = create_refresh_token(identity=user.uid)
-            result = {
-                'status': 'success',
-                'message': 'User logged in.',
-                'user': user.serialize(),
-                'access_token': access_token
-            }
-            response = Response(dumps(result), 200, mimetype='application/json')
-            return response
+    if user and user.verify_hash(request_data['password'], user.password):
+        access_token = create_refresh_token(identity=user.id)
+        result = {
+            'status': 'success',
+            'message': 'User logged in.',
+            'user': user.serialize(),
+            'access_token': access_token
+        }
+        response = Response(dumps(result), 200, mimetype='application/json')
+        return response
     result = {
         "status": "failure",
         "message": "Failed to Login"
@@ -101,7 +108,7 @@ def login():
     return Response(dumps(result), 401, mimetype="application/json")
 
 
-@logins.route('/logout', methods=["POST"])
+@logins.route('/api/v1/logout', methods=["POST"])
 @jwt_refresh_token_required
 def logout():
     result = {

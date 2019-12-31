@@ -61,3 +61,10 @@ class Districts(db.Model):
             'Institutions': [institution.serialize() for institution in self.institutions]
         }
         return json_district
+
+    def serialize_district_only(self):
+        json_district = {
+            'id': self.id,
+            'name': self.district
+        }
+        return json_district

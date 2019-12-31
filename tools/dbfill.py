@@ -19,7 +19,6 @@ from attributes.states.models import States
 from attributes.subjects.models import Subjects
 from attributes.towns.models import Towns
 from attributes.roles.models import Roles
-from services.user_roles.models import UserRoles
 from services.users.models import Users
 
 
@@ -72,13 +71,13 @@ def fill_subjects():
 	df.to_sql(name='subjects', if_exists='append', con=db.engine)
 
 
-def fill_standards():
-	if len(Standards.query.all()) > 0:
-		return
-	df = pd.read_json('./tools/data/standards.json')
-	df.index = range(1, len(df) + 1)
-	df.index.rename("id", inplace=True)
-	df.to_sql(name='standards', if_exists='append', con=db.engine)
+# def fill_standards():
+# 	if len(Standards.query.all()) > 0:
+# 		return
+# 	df = pd.read_json('./tools/data/standards.json')
+# 	df.index = range(1, len(df) + 1)
+# 	df.index.rename("id", inplace=True)
+# 	df.to_sql(name='standards', if_exists='append', con=db.engine)
 
 
 def fill_reservations():
@@ -99,13 +98,13 @@ def fill_religions():
 	df.to_sql(name='religions', if_exists='append', con=db.engine)
 
 
-def fill_roles():
-	if len(Roles.query.all()) > 0:
-		return
-	df = pd.read_json('./tools/data/roles.json')
-	df.index = range(1, len(df) + 1)
-	df.index.rename("id", inplace=True)
-	df.to_sql(name='roles', if_exists='append', con=db.engine)
+# def fill_roles():
+# 	if len(Roles.query.all()) > 0:
+# 		return
+# 	df = pd.read_json('./tools/data/roles.json')
+# 	df.index = range(1, len(df) + 1)
+# 	df.index.rename("id", inplace=True)
+# 	df.to_sql(name='roles', if_exists='append', con=db.engine)
 
 
 def fill_users():
@@ -117,10 +116,10 @@ def fill_users():
 	df.to_sql(name='users', if_exists='append', con=db.engine)
 
 
-def fill_user_roles():
-	if len(UserRoles.query.all()) > 0:
-		return
-	df = pd.read_json('./tools/data/user_roles.json')
-	df.index = range(1, len(df) + 1)
-	df.to_sql(name='user_roles', if_exists='append', con=db.engine, index=False)
+# def fill_user_roles():
+# 	if len(UserRoles.query.all()) > 0:
+# 		return
+# 	df = pd.read_json('./tools/data/user_roles.json')
+# 	df.index = range(1, len(df) + 1)
+# 	df.to_sql(name='user_roles', if_exists='append', con=db.engine, index=False)
 

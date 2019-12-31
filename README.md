@@ -1,13 +1,13 @@
-# vanvia-api
+# a1jobs-api
 
 This Project is built mainly with flask-api, flask-blueprint and flask-jwt-extented. It works  both with python 2.7 and 3.X
 However, it is strongly recommended for the contributors to use python3.
 
 # Setup
 
-git clone https://github.com/hodersolutions/vanvia-api
+git clone https://github.com/hodersolutions/a1jobs-api
 
-cd vanvia-api
+cd a1jobs-api
 
 pip install -r requirements.txt
 

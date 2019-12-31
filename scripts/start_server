@@ -1,4 +1,4 @@
 #!/bin/bash
 /etc/init.d/nginx restart
-cd /home/ubuntu/vanvia-api
+cd /home/ubuntu/a1jobs-api
 gunicorn --bind 0.0.0.0:5000 run --daemon

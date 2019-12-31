@@ -1,5 +1,5 @@
 #!/bin/bash
-cd /home/ubuntu/vanvia-api
+cd /home/ubuntu/a1jobs-api
 apt-get -y install software-properties-common
 add-apt-repository -y ppa:deadsnakes/ppa
 apt-get -y update
@@ -11,5 +11,5 @@ mkdir /home/www && cd /home/www
 cp -r ./* /home/www/
 /etc/init.d/nginx start
 rm /etc/nginx/sites-enabled/default
-cp /home/ubuntu/vanvia-api/scripts/vanvia-api /etc/nginx/sites-available/vanvia-api
-ln -s /etc/nginx/sites-available/vanvia-api /etc/nginx/sites-enabled/vanvia-api
+cp /home/ubuntu/a1jobs-api/scripts/a1jobs-api /etc/nginx/sites-available/a1jobs-api
+ln -s /etc/nginx/sites-available/a1jobs-api /etc/nginx/sites-enabled/a1jobs-api

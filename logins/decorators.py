@@ -13,6 +13,7 @@ from json import dumps
 from functools import wraps
 
 
+# TODO: @validate_passowrd
 def validate_login(func):
     """
     The function should validate the user registration request
@@ -22,18 +23,25 @@ def validate_login(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         body = request.get_json()
-        if "uid" not in body and "mobile" not in body:
+        if "email" not in body and "mobile" not in body:
             error = {
                 "status": "failure",
-                "message": "Bad Input, Please enter valid credentials."
+                "message": "Bad Input, Please enter valid Email/Mobile."
             }
             return Response(dumps(error), 400, mimetype="application/json")
-        if "uid" in body and not body["uid"]:
+        if "email" in body and not body["email"]:
             error = {
                 "status": "failure",
-                "message": "Bad Input, Please enter valid uid."
+                "message": "Bad Input, Please enter valid Email."
             }
             return Response(dumps(error), 400, mimetype="application/json")
+        if "mobile" in body and not body["mobile"]:
+            error = {
+                "status": "failure",
+                "message": "Bad Input, Please enter valid Mobile."
+            }
+            return Response(dumps(error), 400, mimetype="application/json")
+
         if "password" in body and not body["password"]:
             error = {
                 "status": "failure",

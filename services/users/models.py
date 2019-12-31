@@ -18,16 +18,8 @@ class Users(db.Model):
 
     # unique identifier for a user
     id = db.Column(db.Integer, primary_key=True)
-    # uid, can be student's enrollment id, staff's employee_id
-    uid = db.Column(db.Integer, nullable=False)
-    # institute id
-    uid = db.Column(db.String(200), nullable=False)
     # encrypted value
-    password = db.Column(db.String(200), nullable=True)
-    # first name of a user
-    first_name = db.Column(db.String(80), nullable=True)
-    # last name of a user
-    last_name = db.Column(db.String(80), nullable=True)
+    password = db.Column(db.String(200), nullable=False)
     # email of the user, cannot be null, and should be unique
     email = db.Column(db.String(80), nullable=True)
     # mobile number of the user
@@ -36,15 +28,6 @@ class Users(db.Model):
     creation_date = db.Column(db.DateTime, nullable=True, default=datetime.now())
     # If user is not with the Org anymore, TODO: use this effectively
     is_active = db.Column(db.Boolean, nullable=True, default=1)
-    # user who is enrolling this record
-    user_creator = db.Column(db.Integer, nullable=True)
-    # user who is updating this record
-    user_modifier = db.Column(db.Integer, nullable=True)
-    # json value to store user specific details
-    details = db.Column(db.String(2000), nullable=True)
-
-    # foreign key from the user_roles table
-    user_roles = db.relationship('UserRoles', backref='enquiry', lazy=True)
 
     # foreign key from the user_details table
     # roles = db.relationship('UserDetails', backref='enquiry', lazy=True)
@@ -76,7 +59,7 @@ class Users(db.Model):
         except Exception as e:
             return None, e
 
-        return cls.get_user_by_uid(_user.uid), None
+        return _user.serialize(), None
 
     @classmethod
     def get_all_users(cls):
@@ -90,17 +73,6 @@ class Users(db.Model):
                 return user_object
             else:
                 return user_object.serialize()
-        except:
-            return None
-
-    @classmethod
-    def get_user_by_uid(cls, _uid):
-        try:
-            user_object = cls.query.filter_by(uid=_uid).first()
-            if not user_object:
-                return user_object
-            else:
-                return user_object
         except:
             return None
 
@@ -149,13 +121,9 @@ class Users(db.Model):
     def serialize(self):
         json_user = {
             "id": self.id,
-            "uid": self.uid,
             "mobile": self.mobile,
             "Email": self.email,
             # "registered_on": str(self.registered_on),
-            "Fullname": self.fullname(),
-            "details": self.details,
-            "roles": [user_role.roles.serialize_without_users() for user_role in self.user_roles]
         }
         return json_user
 
@@ -187,9 +155,6 @@ class UsersAudit(db.Model):
     audit_id = db.Column(db.Integer, primary_key=True)
     # user identifier
     id = db.Column(db.Integer, nullable=False)
-    # uid, can be student's enrollment id, staff's employee_id
-    uid = db.Column(db.Integer, nullable=False)
-    # encrypted value
     password = db.Column(db.String(200), nullable=True)
     # first name of a user
     first_name = db.Column(db.String(80), nullable=True)
