@@ -52,4 +52,3 @@ app.register_blueprint(districts)
 app.register_blueprint(states)
 app.register_blueprint(users)
 app.register_blueprint(requisitions)
-

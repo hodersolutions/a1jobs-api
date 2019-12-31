@@ -10,12 +10,8 @@
 ##########################################################################
 from main import *
 
-
-
-
 # with application.app_context():
 # #     init_db()
-
 
 if __name__ == "__main__":
     # application = create_app()
