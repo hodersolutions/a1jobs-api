@@ -77,6 +77,17 @@ class Users(db.Model):
             return None
 
     @classmethod
+    def get_user_by_mobile(cls, _mobile):
+        try:
+            user_object = cls.query.filter_by(mobile=_mobile).first()
+            if not user_object:
+                return user_object
+            else:
+                return user_object.serialize()
+        except:
+            return None
+
+    @classmethod
     def get_users_from_text(cls, text):
         query = """select id, Users.firstname, Users.lastname from Users where Users.firstname like "%{}%"
         or Users.lastname like "%{}%" or Users.username like "%{}%" """.format(text, text, text)
@@ -118,6 +129,17 @@ class Users(db.Model):
 
         return cls.get_user_by_email(_user.email)
 
+    @classmethod
+    def update_user_by_mobile(cls, _mobile, _user):
+        try:
+            user_to_update = cls.query.filter_by(mobile=_mobile).first()
+            user_to_update.mobile = _user.mobile
+            db.session.commit()
+        except:
+            return False
+
+        return cls.get_user_by_mobile(_user.mobile)
+        
     def serialize(self):
         json_user = {
             "id": self.id,
