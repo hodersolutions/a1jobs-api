@@ -19,7 +19,7 @@ from attributes.states.models import States
 from attributes.subjects.models import Subjects
 from attributes.towns.models import Towns
 from attributes.roles.models import Roles
-from services.users.models import Users
+from logins.models import Users
 
 
 # Fill the districts
@@ -122,4 +122,3 @@ def fill_users():
 # 	df = pd.read_json('./tools/data/user_roles.json')
 # 	df.index = range(1, len(df) + 1)
 # 	df.to_sql(name='user_roles', if_exists='append', con=db.engine, index=False)
-

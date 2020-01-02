@@ -12,7 +12,7 @@ from flask import Blueprint
 from flask import Response, request
 from json import dumps
 from logins.decorators import validate_login
-from services.users.models import Users
+from logins.models import Users
 from flask_jwt_extended import (create_refresh_token, jwt_refresh_token_required)
 
 
@@ -81,8 +81,8 @@ def login():
     user = None
     if "email" in request_data:
         user = Users.query.filter_by(email=request_data["email"]).first()
-    elif "mobile" in request_data:
-        user = Users.query.filter_by(email=request_data["mobile"]).first()
+    if not user and "mobile" in request_data:
+        user = Users.query.filter_by(mobile=request_data["mobile"]).first()
     if not user or not user.password:
         result = {
             'status': 'failure',

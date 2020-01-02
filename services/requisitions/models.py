@@ -10,7 +10,7 @@
 ##########################################################################
 from main import db
 from datetime import datetime
-from services.users.models import Users
+from logins.models import Users
 from attributes.districts.models import Districts
 from attributes.qualifications.models import Qualifications
 from attributes.states.models import States

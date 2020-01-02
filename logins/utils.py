@@ -8,7 +8,7 @@
 # Copyright:   (c) Hoder Solutions Pvt Ltd 2018 - Present
 # Licence:   <your licence>
 ##########################################################################
-from services.users.models import Users
+from logins.models import Users
 from attributes.roles.models import (Roles, UserRoles)
 from flask import Response
 from json import dumps
