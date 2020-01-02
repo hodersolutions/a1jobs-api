@@ -26,19 +26,19 @@ def register():
         user = Users.get_user_by_email(request_data["email"])
         if user:
             result = {
-                'status': 'success',
+                'status': 'failure',
                 'message': 'User Already exists with the Email.'
             }
-            response = Response(dumps(result), 200, mimetype='application/json')
+            response = Response(dumps(result), 400, mimetype='application/json')
             return response
     if "mobile" in request_data:
         user = Users.get_user_by_mobile(request_data["mobile"])
         if user:
             result = {
-                'status': 'success',
+                'status': 'failure',
                 'message': 'User Already exists with the Mobile.'
             }
-            response = Response(dumps(result), 200, mimetype='application/json')
+            response = Response(dumps(result), 400, mimetype='application/json')
             return response
 
     new_user = Users()
@@ -68,9 +68,6 @@ def register():
         }
         response = Response(dumps(result), 501, mimetype='application/json')
         return response
-
-    return Response({h: 'hhf'}, 501, mimetype='application/json')
-
 
 @logins.route('/api/v1/login', methods=["POST"])
 @validate_login
