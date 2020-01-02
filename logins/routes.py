@@ -27,8 +27,7 @@ def register():
         if user:
             result = {
                 'status': 'success',
-                'message': 'User Already exists with the Email.',
-                'user': user.serialize()
+                'message': 'User Already exists with the Email.'
             }
             response = Response(dumps(result), 200, mimetype='application/json')
             return response
@@ -37,8 +36,7 @@ def register():
         if user:
             result = {
                 'status': 'success',
-                'message': 'User Already exists with the Mobile.',
-                'user': user.serialize()
+                'message': 'User Already exists with the Mobile.'
             }
             response = Response(dumps(result), 200, mimetype='application/json')
             return response
