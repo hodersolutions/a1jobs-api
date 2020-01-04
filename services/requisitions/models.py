@@ -12,6 +12,7 @@ from main import db
 from datetime import datetime
 from logins.models import Users
 from attributes.districts.models import Districts
+from attributes.jobtypes.models import JobTypes
 from attributes.qualifications.models import Qualifications
 from attributes.states.models import States
 from attributes.subjects.models import Subjects
@@ -20,7 +21,7 @@ class Requisitions(db.Model):
     __tablename__ =  "requisitions"
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(2000), default="")
-    jobtype = db.Column(db.Integer, default=0)
+    jobtype = db.Column(db.Integer, db.ForeignKey('job_types.id'))
     gender = db.Column(db.Integer, default=0)
     subject = db.Column(db.Integer, db.ForeignKey('subjects.id'))
     requisitiondetails = db.Column(db.String(2000), default="")
