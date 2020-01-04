@@ -19,6 +19,7 @@ from attributes.states.models import States
 from attributes.subjects.models import Subjects
 from attributes.towns.models import Towns
 from attributes.roles.models import Roles
+from attributes.jobtypes.models import JobTypes
 from logins.models import Users
 
 
@@ -31,6 +32,14 @@ def fill_districts():
 	df.index.rename("id", inplace=True)
 	df.to_sql(name='districts', if_exists='append', con=db.engine)
 
+# Fill the jobtypes
+def fill_job_types():
+	if len(JobTypes.query.all()) > 0:
+		return
+	df = pd.read_json('./tools/data/job_types.json')
+	df.index = range(1, len(df) + 1)
+	df.index.rename("id", inplace=True)
+	df.to_sql(name='job_types', if_exists='append', con=db.engine)
 
 
 # Fill the towns
@@ -42,8 +51,7 @@ def fill_towns():
 	df.index.rename("id", inplace=True)
 	df.to_sql(name='towns', if_exists='append', con=db.engine)
 
-
-# Fill the districts
+# Fill the states
 def fill_states():
 	if len(States.query.all()) > 0:
 		return
@@ -52,7 +60,7 @@ def fill_states():
 	df.index.rename("id", inplace=True)
 	df.to_sql(name='states', if_exists='append', con=db.engine)
 
-
+# Fill the institutions
 def fill_institutions():
 	if len(Institutions.query.all()) > 0:
 		return
@@ -61,7 +69,7 @@ def fill_institutions():
 	df.index.rename("id", inplace=True)
 	df.to_sql(name='institutions', if_exists='append', con=db.engine)
 
-
+# Fill the subjects
 def fill_subjects():
 	if len(Subjects.query.all()) > 0:
 		return
@@ -70,7 +78,7 @@ def fill_subjects():
 	df.index.rename("id", inplace=True)
 	df.to_sql(name='subjects', if_exists='append', con=db.engine)
 
-
+# Fill the standards
 # def fill_standards():
 # 	if len(Standards.query.all()) > 0:
 # 		return
@@ -79,7 +87,7 @@ def fill_subjects():
 # 	df.index.rename("id", inplace=True)
 # 	df.to_sql(name='standards', if_exists='append', con=db.engine)
 
-
+# Fill the reservations
 def fill_reservations():
 	if len(Reservations.query.all()) > 0:
 		return
@@ -88,7 +96,7 @@ def fill_reservations():
 	df.index.rename("id", inplace=True)
 	df.to_sql(name='reservations', if_exists='append', con=db.engine)
 
-
+# Fill the religions
 def fill_religions():
 	if len(Religions.query.all()) > 0:
 		return
@@ -97,7 +105,7 @@ def fill_religions():
 	df.index.rename("id", inplace=True)
 	df.to_sql(name='religions', if_exists='append', con=db.engine)
 
-
+# Fill the roles
 # def fill_roles():
 # 	if len(Roles.query.all()) > 0:
 # 		return
@@ -106,7 +114,7 @@ def fill_religions():
 # 	df.index.rename("id", inplace=True)
 # 	df.to_sql(name='roles', if_exists='append', con=db.engine)
 
-
+# Fill the users
 def fill_users():
 	if len(Users.query.all()) > 0:
 		return
@@ -115,7 +123,7 @@ def fill_users():
 	df.index.rename("id", inplace=True)
 	df.to_sql(name='users', if_exists='append', con=db.engine)
 
-
+# Fill the user roles
 # def fill_user_roles():
 # 	if len(UserRoles.query.all()) > 0:
 # 		return

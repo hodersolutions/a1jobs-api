@@ -24,4 +24,5 @@ if __name__ == "__main__":
     dbfill.fill_states()
     dbfill.fill_subjects()
     dbfill.fill_towns()
+    dbfill.fill_job_types()
     app.run(debug=True, port=5000)

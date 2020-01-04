@@ -10,8 +10,6 @@ requisitions = Blueprint('requisitions', __name__)
 @requisitions.route("/api/v1/requisitions/filter", methods=["GET"])
 def api_requisitions_all():
     filter_dict = request.args.to_dict()
-    print(filter_dict)
-
     responseObject = {
         "status": "success",
         "message": "Retrieved all requisitions successfully.",
@@ -58,7 +56,6 @@ def api_requisition_via(id):
 #@token_required
 def api_add_requisition():
     request_data = request.get_json()
-    print(request_data)
     if(True):
         requisition = Requisitions.submit_requisition_from_json(request_data)
         if requisition is None or requisition.id < 0:
@@ -80,7 +77,6 @@ def api_add_requisition():
         }
         return Response(dumps(responseObject), 400, mimetype='application/json')
 
-#
 @requisitions.route("/api/v1/requisition/<int:id>", methods=["DELETE"])
 def api_delete_requisition_via(id):
     requisition = Requisitions.delete_requisition_from_id(id)

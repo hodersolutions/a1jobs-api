@@ -31,6 +31,7 @@ from attributes.institutions.routes import institutions
 from attributes.towns.routes import towns
 from attributes.districts.routes import districts
 from attributes.states.routes import states
+from attributes.jobtypes.routes import jobtypes
 # from attributes.standards.requisitions import requisitions
 from logins.routes import logins
 from config.routes import config
@@ -44,6 +45,7 @@ app.register_blueprint(main)
 app.register_blueprint(reservations)
 app.register_blueprint(religions)
 app.register_blueprint(subjects)
+app.register_blueprint(jobtypes)
 app.register_blueprint(institutions)
 app.register_blueprint(towns)
 app.register_blueprint(districts)
