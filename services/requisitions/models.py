@@ -12,6 +12,7 @@ from main import db
 from datetime import datetime
 from logins.models import Users
 from attributes.districts.models import Districts
+from attributes.towns.models import Towns
 from attributes.jobtypes.models import JobTypes
 from attributes.qualifications.models import Qualifications
 from attributes.states.models import States
@@ -38,9 +39,11 @@ class Requisitions(db.Model):
     qualification = db.Column(db.Integer, db.ForeignKey('qualifications.id'))
     state = db.Column(db.Integer, db.ForeignKey('states.id'))
     district = db.Column(db.Integer, db.ForeignKey('districts.id'))
+    town = db.Column(db.Integer, db.ForeignKey('towns.id'))
     registered_on = db.Column(db.DateTime, nullable=False, default=datetime.now())
     closed_on = db.Column(db.DateTime)
     isactive = db.Column(db.Boolean, nullable=False, default=True)
+
 
 
     @classmethod
@@ -84,8 +87,11 @@ class Requisitions(db.Model):
                 requisition.recruiter = 1
         if not json_requisition.get("district", None) is None:
             requisition.district = json_requisition.get("district", None)
-        if not json_requisition.get("state", None) is None:
-            requisition.state = json_requisition.get("state", None)
+        if not json_requisition.get("stateObject", None) is None:
+            requisition.state = json_requisition.get("stateObject", None)
+            print(requisition.state,'in requsition model')
+        if not json_requisition.get("town", None) is None:
+            requisition.town = json_requisition.get("town", None)
         if not json_requisition.get("qualification", None) is None:
             requisition.qualification = json_requisition.get("qualification", None)        
         db.session.add(requisition)
@@ -115,6 +121,7 @@ class Requisitions(db.Model):
             #"Minimum Qualification Needed": Qualifications.get_qualification_from_id(self.qualification).qualification,
             "District": Districts.get_district_from_id(self.district).district,
             "State": States.get_state_from_id(self.state).state,
+			"Town": Towns.get_town_from_id(self.town).town,
             "Institution": self.institution,
             "Minimum years of Experience": self.minexperience,
             "Requisition Description": self.requisitiondetails,
@@ -134,10 +141,12 @@ class Requisitions(db.Model):
         json_requisition = {
             "Id": requisition_dict['id'],
             "Title": requisition_dict['title'],
+            "Subject": Subjects.get_subject_from_id(requisition_dict['subject']).subject,
             #"Recruiter": users.Users.get_user_by(self.recruiter).email,
             "Minimum Qualification Needed": Qualifications.get_qualification_from_id(requisition_dict['qualification']).qualification,
             "District": Districts.get_district_from_id(requisition_dict['district']).district,
             "State": States.get_state_from_id(requisition_dict['state']).state,
+			"Town": Towns.get_town_from_id(requisition_dict['town']).town,
             "School": requisition_dict['institution'],
             "Minimum years of Experience": requisition_dict['minexperience'],
             "Requisition Description": requisition_dict['requisitiondetails'],
