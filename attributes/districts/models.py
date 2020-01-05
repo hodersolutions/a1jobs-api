@@ -10,7 +10,6 @@
 ##########################################################################
 from main import db
 
-
 class Districts(db.Model):
     __tablename__ =  "districts"
 

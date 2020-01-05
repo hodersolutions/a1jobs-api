@@ -144,7 +144,7 @@ class Users(db.Model):
         json_user = {
             "id": self.id,
             "mobile": self.mobile,
-            "Email": self.email,
+            "email": self.email,
             # "registered_on": str(self.registered_on),
         }
         return json_user
@@ -154,9 +154,9 @@ class Users(db.Model):
             "id": self.id,
             "uid": self.uid,
             "mobile": self.mobile,
-            "Email": self.email,
-            # "registered_on": str(self.registered_on),
-            "Fullname": self.fullname(),
+            "email": self.email,
+            #"registered_on": str(self.registered_on),
+            "fullname": self.fullname(),
             "details": self.details,
         }
         return json_user
