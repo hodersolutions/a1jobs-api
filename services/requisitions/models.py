@@ -45,7 +45,6 @@ class Requisitions(db.Model):
     isactive = db.Column(db.Boolean, nullable=False, default=True)
 
 
-
     @classmethod
     def add_requisition(classname, _requisition):
         pass
