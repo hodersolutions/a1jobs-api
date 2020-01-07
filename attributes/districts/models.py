@@ -57,7 +57,7 @@ class Districts(db.Model):
             'id': self.id,
             'name': self.district,
             'towns': [town.serialize() for town in self.towns],
-            'Institutions': [institution.serialize() for institution in self.institutions]
+            'institutions': [institution.serialize() for institution in self.institutions]
         }
         return json_district
 

@@ -86,8 +86,8 @@ class Requisitions(db.Model):
                 requisition.recruiter = 1
         if not json_requisition.get("district", None) is None:
             requisition.district = json_requisition.get("district", None)
-        if not json_requisition.get("stateObject", None) is None:
-            requisition.state = json_requisition.get("stateObject", None)
+        if not json_requisition.get("stateLocation", None) is None:
+            requisition.state = json_requisition.get("stateLocation", None)
             print(requisition.state,'in requsition model')
         if not json_requisition.get("town", None) is None:
             requisition.town = json_requisition.get("town", None)
