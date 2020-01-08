@@ -27,8 +27,8 @@ class Requisitions(db.Model):
     subject = db.Column(db.Integer, db.ForeignKey('subjects.id'))
     requisitiondetails = db.Column(db.String(2000), default="")
     responsibilities = db.Column(db.String(2000), default="")
-    benifits = db.Column(db.String(2000), default="")
-    education = db.Column(db.String(2000), default="")
+    benefits = db.Column(db.String(2000), default="")
+    eduexpdetails = db.Column(db.String(2000), default="")
     minexperience = db.Column(db.Integer, default=0)
     maxexperience = db.Column(db.Integer, default=0)
     telephone = db.Column(db.Integer, default=0)
@@ -40,8 +40,8 @@ class Requisitions(db.Model):
     state = db.Column(db.Integer, db.ForeignKey('states.id'))
     district = db.Column(db.Integer, db.ForeignKey('districts.id'))
     town = db.Column(db.Integer, db.ForeignKey('towns.id'))
-    registered_on = db.Column(db.DateTime, nullable=False, default=datetime.now())
-    closed_on = db.Column(db.DateTime)
+    registeredon = db.Column(db.DateTime, nullable=False, default=datetime.now())
+    closedon = db.Column(db.DateTime)
     isactive = db.Column(db.Boolean, nullable=False, default=True)
 
 
@@ -64,10 +64,10 @@ class Requisitions(db.Model):
             requisition.requisitiondetails = json_requisition.get("requisitiondetails", None)
         if not json_requisition.get("responsibilities", None) is None:
             requisition.responsibilities = json_requisition.get("responsibilities", None)
-        if not json_requisition.get("benifits", None) is None:
-            requisition.benifits = json_requisition.get("benifits", None)
-        if not json_requisition.get("education", None) is None:
-            requisition.education = json_requisition.get("education", None)
+        if not json_requisition.get("benefits", None) is None:
+            requisition.benefits = json_requisition.get("benefits", None)
+        if not json_requisition.get("eduexpdetails", None) is None:
+            requisition.eduexpdetails = json_requisition.get("eduexpdetails", None)
         if not json_requisition.get("minexperience", None) is None:
             requisition.minexperience = json_requisition.get("minexperience", None)
         if not json_requisition.get("maxexperience", None) is None:
@@ -88,11 +88,12 @@ class Requisitions(db.Model):
             requisition.district = json_requisition.get("district", None)
         if not json_requisition.get("stateLocation", None) is None:
             requisition.state = json_requisition.get("stateLocation", None)
-            print(requisition.state,'in requsition model')
         if not json_requisition.get("town", None) is None:
             requisition.town = json_requisition.get("town", None)
         if not json_requisition.get("qualification", None) is None:
-            requisition.qualification = json_requisition.get("qualification", None)        
+            requisition.qualification = json_requisition.get("qualification", None)
+        if not json_requisition.get("deadline", None) is None:
+            requisition.closedon = datetime.strptime(json_requisition.get("deadline", None), "%Y-%m-%dT%H:%M:%S.%fZ")
         db.session.add(requisition)
         db.session.commit()
         return requisition
@@ -102,7 +103,6 @@ class Requisitions(db.Model):
         query = "select * from requisitions where "
         for key, value in filter.items():
             query = "{} {} = {}".format(query, key, value)
-        print(query)
         result = db.engine.execute(query)
         list_result =[]
         for requisition in result:
@@ -113,49 +113,53 @@ class Requisitions(db.Model):
 
     def serialize(self):
         json_requisition = {
-            "Id": self.id,
-            "Title": self.title,
-            "Subject": Subjects.get_subject_from_id(self.subject).subject,
+            "id": self.id,
+            "title": self.title,
+            "subject": Subjects.get_subject_from_id(self.subject).subject,
             #"Recruiter": users.Users.get_user_by(self.recruiter).email,
             #"Minimum Qualification Needed": Qualifications.get_qualification_from_id(self.qualification).qualification,
-            "District": Districts.get_district_from_id(self.district).district,
-            "State": States.get_state_from_id(self.state).state,
-			"Town": Towns.get_town_from_id(self.town).town,
-            "Institution": self.institution,
-            "Minimum years of Experience": self.minexperience,
-            "Requisition Description": self.requisitiondetails,
-            "Responsibilities": self.responsibilities,
-            "Benefits": self.benifits,
-            "Education": self.education,
-            "Salary": self.salary,
-            "Vacancy": self.vacancy,
-            "Gender": self.gender,
-            "JobType": self.jobtype,
-            "Opened on":self.registered_on.strftime("%d-%B")
+            "district": Districts.get_district_from_id(self.district).district,
+            "state": States.get_state_from_id(self.state).state,
+			"town": Towns.get_town_from_id(self.town).town,
+            "institution": self.institution,
+            "minexperience": self.minexperience,
+            "maxexperience": self.maxexperience,
+            "requisitiondetails": self.requisitiondetails,
+            "responsibilities": self.responsibilities,
+            "benefits": self.benefits,
+            "eduexpdetails": self.eduexpdetails,
+            "salary": self.salary,
+            "vacancy": self.vacancy,
+            "gender": self.gender,
+            "jobType": self.jobtype,
+            "registeredon":self.registeredon.strftime("%d-%B"),
+            "closedon":self.closedon.strftime("%d-%B")
         }
         return json_requisition
 
     @classmethod
     def serialize_dict(classname, requisition_dict):
         json_requisition = {
-            "Id": requisition_dict['id'],
-            "Title": requisition_dict['title'],
-            "Subject": Subjects.get_subject_from_id(requisition_dict['subject']).subject,
+            "id": requisition_dict['id'],
+            "title": requisition_dict['title'],
+            "subject": Subjects.get_subject_from_id(requisition_dict['subject']).subject,
             #"Recruiter": users.Users.get_user_by(self.recruiter).email,
-            "Minimum Qualification Needed": Qualifications.get_qualification_from_id(requisition_dict['qualification']).qualification,
-            "District": Districts.get_district_from_id(requisition_dict['district']).district,
-            "State": States.get_state_from_id(requisition_dict['state']).state,
-			"Town": Towns.get_town_from_id(requisition_dict['town']).town,
-            "School": requisition_dict['institution'],
-            "Minimum years of Experience": requisition_dict['minexperience'],
-            "Requisition Description": requisition_dict['requisitiondetails'],
-            "Responsibilities": requisition_dict['responsibilities'],
-            "Benefits": requisition_dict['benifits'],
-            "Education": requisition_dict['education'],
-            "Salary": requisition_dict['salary'],
-            "Vacancy": requisition_dict['vacancy'],
-            "Gender": requisition_dict['gender'],
-            "JobType": requisition_dict['jobtype'],
-            "Opened on":requisition_dict['registered_on']
+            #"Minimum Qualification Needed": Qualifications.get_qualification_from_id(requisition_dict['qualification']).qualification,
+            "district": Districts.get_district_from_id(requisition_dict['district']).district,
+            "state": States.get_state_from_id(requisition_dict['state']).state,
+			"town": Towns.get_town_from_id(requisition_dict['town']).town,
+            "institution": requisition_dict['institution'],
+            "minexperience": requisition_dict['minexperience'],
+            "maxexperience": requisition_dict['maxexperience'],
+            "requisitiondetails": requisition_dict['requisitiondetails'],
+            "responsibilities": requisition_dict['responsibilities'],
+            "benefits": requisition_dict['benefits'],
+            "eduexpdetails": requisition_dict['eduexpdetails'],
+            "salary": requisition_dict['salary'],
+            "vacancy": requisition_dict['vacancy'],
+            "gender": requisition_dict['gender'],
+            "jobtype": requisition_dict['jobtype'],
+            "registeredon":requisition_dict['registeredon'],
+            "closedon":requisition_dict['deadline']
         }
         return json_requisition
