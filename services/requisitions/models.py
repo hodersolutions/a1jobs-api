@@ -35,6 +35,7 @@ class Requisitions(db.Model):
     salary = db.Column(db.Integer, default=0)
     vacancy = db.Column(db.Integer, default=0)
     institution = db.Column(db.String(80), default="")
+    submitter = db.Column(db.Integer, db.ForeignKey('users.id'))
     recruiter = db.Column(db.Integer, db.ForeignKey('users.id'))
     qualification = db.Column(db.Integer, db.ForeignKey('qualifications.id'))
     state = db.Column(db.Integer, db.ForeignKey('states.id'))
@@ -80,12 +81,14 @@ class Requisitions(db.Model):
             requisition.vacancy = json_requisition.get("vacancy", None)
         if not json_requisition.get("institution", None) is None:
             requisition.institution = json_requisition.get("institution", None)
-        if not json_requisition.get("submitter", None) is None:
-            user = Users.get_user_by_username(json_requisition.get("submitter", None))
+        if not json_requisition.get("recruiter", None) is None:
+            user = Users.get_user_by_username(json_requisition.get("recruiter", None))
             if not user is None:                
                 requisition.recruiter = 1
         if not json_requisition.get("district", None) is None:
             requisition.district = json_requisition.get("district", None)
+        if not json_requisition.get("submitter", None) is None:
+            requisition.submitter = json_requisition.get("submitter", None)
         if not json_requisition.get("stateLocation", None) is None:
             requisition.state = json_requisition.get("stateLocation", None)
         if not json_requisition.get("town", None) is None:
@@ -132,6 +135,7 @@ class Requisitions(db.Model):
             "vacancy": self.vacancy,
             "gender": self.gender,
             "jobtype": self.jobtype,
+            "submitter": self.submitter,
             "registeredon":self.registeredon.strftime("%d-%B-%Y"),
             "closedon":self.closedon.strftime("%d-%B-%Y")
         }
@@ -159,6 +163,7 @@ class Requisitions(db.Model):
             "vacancy": requisition_dict['vacancy'],
             "gender": requisition_dict['gender'],
             "jobtype": requisition_dict['jobtype'],
+            "submitter": requisition_dict['submitter'],
             "registeredon":requisition_dict['registeredon'],
             "closedon":requisition_dict['deadline']
         }
