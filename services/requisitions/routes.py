@@ -38,8 +38,14 @@ def api_requisitions():
 
 @requisitions.route("/api/v1/requisition/<int:id>", methods=["GET"])
 def api_requisition_via(id):
-    requisition = Requisitions.query.get(id)
-    if requisition.id < 0:
+    requisition = Requisitions.query.get(id)    
+    if requisition is None:
+        responseObject = {
+            "status": "failure",
+            "message": "Failed to retrieve an Invalid requisition."
+        }
+        return Response(dumps(responseObject), 400, mimetype='application/json')
+    elif requisition.id < 0:
         responseObject = {
             "status": "failure",
             "message": "Failed to retrieve an Invalid requisition."

@@ -131,9 +131,9 @@ class Requisitions(db.Model):
             "salary": self.salary,
             "vacancy": self.vacancy,
             "gender": self.gender,
-            "jobType": self.jobtype,
-            "registeredon":self.registeredon.strftime("%d-%B"),
-            "closedon":self.closedon.strftime("%d-%B")
+            "jobtype": self.jobtype,
+            "registeredon":self.registeredon.strftime("%d-%B-%Y"),
+            "closedon":self.closedon.strftime("%d-%B-%Y")
         }
         return json_requisition
 
