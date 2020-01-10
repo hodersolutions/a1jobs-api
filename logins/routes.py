@@ -98,7 +98,7 @@ def login():
         return response
     result = {
         "status": "failure",
-        "message": "Failed to Login"
+        "message": "Failed to Login, please check your email / mobile and password."
     }
     return Response(dumps(result), 401, mimetype="application/json")
 
