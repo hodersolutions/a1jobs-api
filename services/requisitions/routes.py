@@ -2,7 +2,7 @@ from flask import Blueprint
 from flask import Response, request
 from json import dumps
 from services.requisitions.models import Requisitions
-# from services.requisitions.decorators import *
+from services.submissions.models import JobApplications
 from flask_jwt_extended import (jwt_refresh_token_required)
 
 requisitions = Blueprint('requisitions', __name__)
@@ -13,12 +13,12 @@ def api_requisitions_all():
     responseObject = {
         "status": "success",
         "message": "Retrieved all requisitions successfully.",
-        "object": Requisitions.get_requisitions_by_filter(filter_dict)
+        "jobs": Requisitions.get_requisitions_by_filter(filter_dict)
     }
     return Response(dumps(responseObject), 200, mimetype='application/json')
 
-@requisitions.route("/api/v1/requisitions", methods=["GET"])
-def api_requisitions():
+@requisitions.route("/api/v1/requisition/", methods=["GET"])
+def api_requisition():
     if 'id' in request.args:
         id = int(request.args['id'])
     else:
@@ -28,27 +28,32 @@ def api_requisitions():
         }
         return Response(dumps(responseObject), 400, mimetype='application/json')
 
-    requisition = Requisitions.get_requisition_from_id(id)
-    responseObject = {
-        "status": "success",
-        "message": "Requisition retrieved successfully.",
-        "requisition": requisition.serialize()
-    }
-    return Response(dumps(responseObject), 200, mimetype='application/json')
+    requisition = Requisitions.query.get(id)    
 
-@requisitions.route("/api/v1/requisition/<int:id>", methods=["GET"])
-def api_requisition_via(id):
-    requisition = Requisitions.query.get(id)
-    if requisition.id < 0:
+    if requisition is None:
         responseObject = {
             "status": "failure",
             "message": "Failed to retrieve an Invalid requisition."
         }
         return Response(dumps(responseObject), 400, mimetype='application/json')
+    elif requisition.id < 0:
+        responseObject = {
+            "status": "failure",
+            "message": "Failed to retrieve an Invalid requisition."
+        }
+        return Response(dumps(responseObject), 400, mimetype='application/json')
+    
+    serializeObj = requisition.serialize()    
+    if 'userid' in request.args:
+        userid = int(request.args['userid'])
+        jobApplication = JobApplications.get_application_from_id_user_id(id,userid)
+        if jobApplication is not None:
+            serializeObj['isapplied'] = True
+    
     responseObject = {
         "status": "success",
         "message": "Requisition retrieved successfully.",
-        "requisition": requisition.serialize()
+        "requisition": serializeObj
     }
     return Response(dumps(responseObject), 200, mimetype='application/json')
 

@@ -53,7 +53,6 @@ class JobTypes(db.Model):
         try:
             db.session.add(_job_type)
             db.session.commit()
-            print(_job_type.name)
         except Exception as e:
             return {'msg': e}
 

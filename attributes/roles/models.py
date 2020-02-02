@@ -64,7 +64,6 @@ class Roles(db.Model):
         try:
             db.session.add(_role)
             db.session.commit()
-            print(_role.keyword)
         except Exception as e:
             return {'msg': e}
 

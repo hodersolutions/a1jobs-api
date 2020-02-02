@@ -10,19 +10,16 @@
 ##########################################################################
 from main import *
 
-# with application.app_context():
-# #     init_db()
-
 if __name__ == "__main__":
-    # application = create_app()
-    db.create_all()
-    from tools import dbfill
-    dbfill.fill_reservations()
-    dbfill.fill_districts()
-    dbfill.fill_institutions()
-    dbfill.fill_religions()
-    dbfill.fill_states()
-    dbfill.fill_subjects()
-    dbfill.fill_towns()
-    dbfill.fill_job_types()
-    app.run(debug=True, port=5000)
+	db.create_all()
+	from tools import dbfill
+	dbfill.fill_reservations()
+	dbfill.fill_states()
+	dbfill.fill_districts()
+	dbfill.fill_towns()
+	dbfill.fill_institutions()
+	dbfill.fill_religions()
+	dbfill.fill_subjects()
+	dbfill.fill_job_types()
+	dbfill.fill_qualifications()
+	application.run(debug=True, port=5000)

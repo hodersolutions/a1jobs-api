@@ -12,7 +12,7 @@ from flask import Blueprint
 from flask import Response, request
 from json import dumps
 from logins.decorators import validate_login
-from logins.models import Users
+from logins.models import Users, UsersProfileBasic
 from flask_jwt_extended import (create_refresh_token, jwt_refresh_token_required)
 
 
@@ -49,8 +49,9 @@ def register():
         new_user.mobile = request_data["mobile"]
     if "password" in request_data:
         new_user.password = Users.generate_hash(request_data["password"])
-    # new_user.created_user = get_jwt_identity().id
-
+    if "is_recruiter" in request_data:
+        new_user.is_recruiter = request_data["is_recruiter"]
+    
     success, error = Users.add_user(new_user)
     if success:
         result = {
@@ -98,10 +99,9 @@ def login():
         return response
     result = {
         "status": "failure",
-        "message": "Failed to Login"
+        "message": "Failed to Login, please check your email / mobile and password."
     }
     return Response(dumps(result), 401, mimetype="application/json")
-
 
 @logins.route('/api/v1/logout', methods=["POST"])
 @jwt_refresh_token_required
@@ -111,3 +111,145 @@ def logout():
         "message": "User logged out."
     }
     return Response(dumps(result), 201, mimetype="application/json")
+#----------------------------User Profile Basic-----------------------------------------#
+
+@logins.route("/api/v1/profile", methods=["POST"])
+#@token_required
+def api_add_profile():
+    request_data = request.get_json()
+    if(True):
+        profile = UsersProfileBasic.add_or_update_user_by_userid(request_data)        
+        if profile is None or profile.id < 0:
+            responseObject = {
+                "status": "failure",
+                "message": "Failed to add / update an Invalid Profile."
+            }
+            return Response(dumps(responseObject), 500, mimetype='application/json')
+        responseObject = {
+            "status": "success",
+            "message": "Profile added / updated successfully."            
+        }
+        return Response(dumps(responseObject), 201, mimetype='application/json')
+    else:
+        responseObject = {
+            "status": "failure",
+            "message": "Failed to add / update an Invalid Profile."
+        }
+        return Response(dumps(responseObject), 400, mimetype='application/json')
+
+@logins.route("/api/v1/profile", methods=["GET"])
+def api_get_profile():
+    userid = 0
+    if 'userid' in request.args:
+        userid = int(request.args['userid'])
+    else:
+        result = {
+            "status": "failure",
+            "message": "Failed to retrieve an Invalid user, no (userid) field provided. please specify an (userid)."
+        }
+        return Response(dumps(result), 400, mimetype='application/json')
+
+    if userid < 0:
+        result = {
+            "status": "failure",
+            "message": "Failed to retrieve an Invalid user."
+        }
+        return Response(dumps(result), 400, mimetype='application/json')
+
+    profile = UsersProfileBasic.get_user_profile_by_userid(userid)
+
+    if profile is None:
+        result = {
+            "status": "failure",
+            "message": "User Profile is incomplete, please update."            
+        }
+        return Response(dumps(result), 400, mimetype='application/json')
+    else:
+        profile_serialized = profile.serialize()
+        result = {
+            "status": "success",
+            "message": "User Profile retrieved successfully.",
+            "profile": profile_serialized
+        }
+        return Response(dumps(result), 200, mimetype='application/json')
+
+@logins.route("/api/v1/profile/user", methods=["GET"])
+def api_get_profile_via_userid():
+    userid = 0
+    if 'userid' in request.args:
+        userid = int(request.args['userid'])
+    else:
+        result = {
+            "status": "failure",
+            "message": "Failed to retrieve an Invalid user, no (userid) field provided. please specify an (userid)."
+        }
+        return Response(dumps(result), 400, mimetype='application/json')
+
+    if userid < 0:
+        result = {
+            "status": "failure",
+            "message": "Failed to retrieve an Invalid user."
+        }
+        return Response(dumps(result), 400, mimetype='application/json')
+
+    profile = UsersProfileBasic.get_profile_joining_user_via_userid(userid)
+
+    if profile is None:
+        result = {
+            "status": "failure",
+            "message": "User Profile is incomplete, please update."            
+        }
+        return Response(dumps(result), 400, mimetype='application/json')
+    else:
+        result = {
+            "status": "success",
+            "message": "User Profile retrieved successfully.",
+            "profile": profile
+        }
+        return Response(dumps(result), 200, mimetype='application/json')
+
+@logins.route("/api/v1/profile/id", methods=["GET"])
+def api_get_profile_by_id():
+    id = 0
+    if 'id' in request.args:
+        id = int(request.args['id'])
+    else:
+        result = {
+            "status": "failure",
+            "message": "Failed to retrieve an Invalid user profile, no (id) field provided. please specify an (id)."
+        }
+        return Response(dumps(result), 400, mimetype='application/json')
+
+    if id < 0:
+        result = {
+            "status": "failure",
+            "message": "Failed to retrieve an Invalid user  profile."
+        }
+        return Response(dumps(result), 400, mimetype='application/json')
+
+    profile = UsersProfileBasic.get_userprofile_joining_user(id)
+
+    if profile is None:
+        result = {
+            "status": "failure",
+            "message": "User Profile does not exist."            
+        }
+        return Response(dumps(result), 400, mimetype='application/json')
+    else:
+        result = {
+            "status": "success",
+            "message": "User Profile retrieved successfully.",
+            "profile": profile
+        }
+        return Response(dumps(result), 200, mimetype='application/json')
+
+
+@logins.route("/api/v1/profile/filter", methods=["GET"])
+def api_get_all_profiles():
+    profile_dict = request.args.to_dict()
+    responseObject = {
+        "status": "success",
+        "message": "Retrieved all user profiles successfully.",
+        "users": UsersProfileBasic.get_all_user_profiles(profile_dict)
+    }
+    return Response(dumps(responseObject), 200, mimetype='application/json')

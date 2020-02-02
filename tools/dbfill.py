@@ -15,6 +15,7 @@ from attributes.institutions.models import Institutions
 from attributes.religions.models import Religions
 from attributes.reservations.models import Reservations
 from attributes.standards.models import Standards
+from attributes.qualifications.models import Qualifications
 from attributes.states.models import States
 from attributes.subjects.models import Subjects
 from attributes.towns.models import Towns
@@ -41,6 +42,14 @@ def fill_job_types():
 	df.index.rename("id", inplace=True)
 	df.to_sql(name='job_types', if_exists='append', con=db.engine)
 
+# Fill the qualifications
+def fill_qualifications():
+	if len(Qualifications.query.all()) > 0:
+		return
+	df = pd.read_json('./tools/data/qualifications.json')
+	df.index = range(1, len(df) + 1)
+	df.index.rename("id", inplace=True)
+	df.to_sql(name='qualifications', if_exists='append', con=db.engine)
 
 # Fill the towns
 def fill_towns():

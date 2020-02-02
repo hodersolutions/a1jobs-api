@@ -11,13 +11,18 @@
 from main import db
 from datetime import datetime
 from passlib.hash import pbkdf2_sha256 as sha256
+from attributes.qualifications.models import Qualifications
+from attributes.states.models import States
+from attributes.subjects.models import Subjects
+from attributes.districts.models import Districts
+from attributes.towns.models import Towns
 
 
 class Users(db.Model):
     __tablename__ = "users"
 
     # unique identifier for a user
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     # encrypted value
     password = db.Column(db.String(200), nullable=False)
     # email of the user, cannot be null, and should be unique
@@ -28,6 +33,10 @@ class Users(db.Model):
     creation_date = db.Column(db.DateTime, nullable=True, default=datetime.now())
     # If user is not with the Org anymore, TODO: use this effectively
     is_active = db.Column(db.Boolean, nullable=True, default=1)
+    # Is the user a recruiter
+    is_recruiter = db.Column(db.Boolean, nullable=True)
+    # Basic profiles
+    profiles = db.relationship('UsersProfileBasic', backref='enquiry', lazy=True)
 
     # foreign key from the user_details table
     # roles = db.relationship('UserDetails', backref='enquiry', lazy=True)
@@ -145,19 +154,16 @@ class Users(db.Model):
             "id": self.id,
             "mobile": self.mobile,
             "email": self.email,
-            # "registered_on": str(self.registered_on),
+            "is_recruiter": self.is_recruiter
         }
         return json_user
 
     def serialize_without_roles(self):
         json_user = {
             "id": self.id,
-            "uid": self.uid,
             "mobile": self.mobile,
             "email": self.email,
-            #"registered_on": str(self.registered_on),
-            "fullname": self.fullname(),
-            "details": self.details,
+            "is_recruiter": self.is_recruiter
         }
         return json_user
 
@@ -169,6 +175,389 @@ class Users(db.Model):
         db.session.commit()
         return True, False
 
+
+class UsersProfileBasic(db.Model):
+    __tablename__ = "users_profile_basic"
+
+    # unique identifier for a user
+    id = db.Column(db.Integer, primary_key=True)
+    # Foreign key user id
+    userid = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    # Firstname
+    firstname = db.Column(db.String(30), nullable=True)
+    # Middlename
+    middlename = db.Column(db.String(30), nullable=True)
+    # Lastname
+    lastname = db.Column(db.String(30), nullable=True)
+    # Fathername
+    fathername = db.Column(db.String(90), nullable=True)
+    #DOB
+    dob = db.Column(db.DateTime, default=datetime.now())
+    #address
+    address = db.Column(db.String(2000), nullable=True)
+    #pan number
+    pan = db.Column(db.String(80), nullable=True)
+    # Gender
+    gender = db.Column(db.Integer, default=0)
+    # Nationality
+    nationality = db.Column(db.String(20), nullable=True)
+    #current designation
+    designation = db.Column(db.String(200), nullable=True)
+    # CTC
+    ctc = db.Column(db.Integer, default=0)
+    # ECTC
+    ectc = db.Column(db.Integer, default=0)
+    #years of experience
+    totalexperience = db.Column(db.Integer, default=0)
+    #teaching subject
+    teachingsubject = db.Column(db.Integer,db.ForeignKey('subjects.id'))
+    #circulum
+    circulum = db.Column(db.Integer, default=0)
+    #currentorganization
+    currentorganization = db.Column(db.String(80), default="")
+    #department
+    department = db.Column(db.Integer, default=0)
+    #qualification
+    qualification = db.Column(db.Integer, db.ForeignKey('qualifications.id'))
+    #state
+    state = db.Column(db.Integer, db.ForeignKey('states.id'))
+    #district
+    district = db.Column(db.Integer, db.ForeignKey('districts.id'))
+    #town
+    town = db.Column(db.Integer, db.ForeignKey('towns.id'))
+    #teaching medium
+    teachingmedium = db.Column(db.Integer, default=0)
+    #segment
+    segment = db.Column(db.Integer, default=0)
+    # registration date & time
+    creation_date = db.Column(db.DateTime, nullable=True, default=datetime.now())
+    # updated date & time
+    updation_date = db.Column(db.DateTime, nullable=True, default=datetime.now())
+    
+    def __repr__(self):
+        return "{ fullname: {1}, id: {2} }".format(self.firstname + self.middlename + self.lastname, self.id)
+
+    def fullname(self):
+        return "{} {} {}".format(self.firstname, self.middlename, self.lastname)
+
+    @classmethod
+    def submit_profile_from_json(cls, json_profile):
+        profile = cls()
+        try:            
+            if not json_profile.get("userid", None) is None:
+                profile.userid = int(json_profile.get("userid", None))
+            if not json_profile.get("firstname", None) is None:
+                profile.firstname = json_profile.get("firstname", None)
+            if not json_profile.get("lastname", None) is None:
+                profile.lastname = json_profile.get("lastname", None)
+            if not json_profile.get("middlename", None) is None:
+                profile.middlename = json_profile.get("middlename", None)
+            if not json_profile.get("fathername", None) is None:
+                profile.fathername = json_profile.get("fathername", None)
+            if not json_profile.get("gender", None) is None:
+                profile.gender = json_profile.get("gender", None)
+            if not json_profile.get("nationality", None) is None:
+                profile.nationality = json_profile.get("nationality", None)
+            if not json_profile.get("ctc", None) is None:
+                profile.ctc = json_profile.get("ctc", None)
+            if not json_profile.get("ectc", None) is None:
+                profile.ectc = json_profile.get("ectc", None)
+            if not json_profile.get("totalexperience", None) is None:
+                profile.totalexperience = json_profile.get("totalexperience", None)               
+            if not json_profile.get("teachingsubject", None) is None:
+                profile.teachingsubject = json_profile.get("teachingsubject", None)               
+            if not json_profile.get("circulum", None) is None:
+                profile.circulum = json_profile.get("circulum", None)              
+            if not json_profile.get("currentorganization", None) is None:
+                profile.currentorganization = json_profile.get("currentorganization", None)               
+            if not json_profile.get("department", None) is None:
+                profile.department = json_profile.get("department", None)              
+            if not json_profile.get("qualification", None) is None:
+                profile.qualification = json_profile.get("qualification", None)               
+            if not json_profile.get("stateLocation", None) is None:
+                profile.state = json_profile.get("stateLocation", None)
+            if not json_profile.get("district", None) is None:
+                profile.district = json_profile.get("district", None)
+            if not json_profile.get("town", None) is None:
+                profile.town = json_profile.get("town", None)
+            if not json_profile.get("teachingmedium", None) is None:
+                profile.teachingmedium = json_profile.get("teachingmedium", None)
+            if not json_profile.get("segment", None) is None:
+                profile.segment = json_profile.get("segment", None)
+            if not json_profile.get("dob", None) is None:
+                profile.dob = datetime.strptime(json_profile.get("dob", None), "%Y-%m-%dT%H:%M:%S.%fZ")
+            if not json_profile.get("address", None) is None:
+                profile.address = json_profile.get("address", None)
+            if not json_profile.get("designation", None) is None:
+                profile.designation = json_profile.get("designation", None)
+            if not json_profile.get("pan", None) is None:
+                profile.pan = json_profile.get("pan", None)
+
+            db.session.add(profile)
+            db.session.commit()
+        except Exception as e:
+            return None, e
+
+        return cls.get_user_profile_by_userid(profile.userid)
+
+    @classmethod
+    def get_all_user_profiles(cls, filter):
+        if filter:
+            return cls.query.filter_by('{} = {}'.format((key,value) for key,value in filter.items())).first()
+        query = "select  up.*,u.email,u.mobile from users_profile_basic up inner join users u on up.userid = u.id"
+        result = db.engine.execute(query)
+        list_result = []
+        if not result:
+            return None
+        for userprofile in result:
+            userprofile_dict = dict(zip(result.keys(), userprofile))
+            list_result.append(UsersProfileBasic.serialize_view_userprofile(userprofile_dict))
+        return  list_result
+        # data = cls.query.all()
+        # for user in data:
+        #     result.append(user.serialize_without_roles())
+        # return result        
+
+    @classmethod
+    def get_user_profile_by_userid(cls, _userid):
+        try:
+            if not _userid is None:
+                profile = cls.query.filter_by(userid=_userid).first()
+            return profile            
+        except:
+            return None
+
+    @classmethod
+    def get_profile_joining_user_via_userid(cls, _userid):
+        try:
+            query = "select  up.*,u.email,u.mobile from users_profile_basic up inner join users u on up.userid = u.id where up.userid = {}".format(_userid)
+            result = db.engine.execute(query)
+            if not result:
+                return None
+            for userprofile in result:
+                userprofile_dict = dict(zip(result.keys(), userprofile))
+            return  UsersProfileBasic.serialize_view_userprofile(userprofile_dict)        
+        except:
+            return None
+
+    @classmethod
+    def get_users_from_text(cls, text):
+        query = """select id, UsersProfileBasic.firstname, UsersProfileBasic.lastname from UsersProfileBasic where UsersProfileBasic.firstname like "%{}%"
+        or UsersProfileBasic.lastname like "%{}%" or UsersProfileBasic.middlename like "%{}%" """.format(text, text, text)
+        result = db.engine.execute(query)
+        list_result = []
+        for user in result:
+            user_dict = {}
+            user_dict['id'] = user[0]
+            user_dict['label'] = "{} {}".format(user[1], user[2])
+            list_result.append(user_dict)
+        return list_result
+
+    @classmethod
+    def get_userprofile_by_id(cls, id):
+        user_object = cls.query.get(id)
+        if not user_object:
+            return None
+        else:
+            return user_object
+
+    @classmethod
+    def get_userprofile_joining_user(cls, id):
+        query = "select  up.*,u.email,u.mobile from users_profile_basic up inner join users u on up.userid = u.id where up.id = {}".format(id)
+        result = db.engine.execute(query)
+        if not result:
+            return None
+        # list_result = []
+        for userprofile in result:
+            userprofile_dict = dict(zip(result.keys(), userprofile))
+            # UsersProfileBasic.serialize_view_userprofile(userprofile_dict)
+        return  UsersProfileBasic.serialize_view_userprofile(userprofile_dict)
+        # user_object = cls.query.get(id)
+
+    @classmethod
+    def get_profile_joining_user_via(cls, id):
+        query = "select  up.*,u.email,u.mobile from users_profile_basic up inner join users u on up.userid = u.id where up.id = {}".format(id)
+        result = db.engine.execute(query)
+        if not result:
+            return None
+        # list_result = []
+        for userprofile in result:
+            userprofile_dict = dict(zip(result.keys(), userprofile))
+            # UsersProfileBasic.serialize_view_userprofile(userprofile_dict)
+        return  UsersProfileBasic.serialize_view_userprofile(userprofile_dict)
+        # user_object = cls.query.get(id)
+
+    @classmethod
+    def delete_user_by_uid(cls, _id):
+        try:
+            cls.query.filter_by(id=_id).delete()
+            db.session.commit()
+        except:
+            return False
+
+        return True
+
+    @classmethod
+    def add_or_update_user_by_userid(cls, json_profile):        
+        try: 
+            if not json_profile.get("userid", None) is None:                
+                profile = cls.query.filter_by(userid=int(json_profile.get("userid"))).first()
+                if profile is None:
+                    profile = cls.submit_profile_from_json(json_profile)                  
+                else:
+                    if not json_profile.get("firstname", None) is None:
+                        profile.firstname = json_profile.get("firstname", None)
+                    if not json_profile.get("lastname", None) is None:
+                        profile.lastname = json_profile.get("lastname", None)
+                    if not json_profile.get("middlename", None) is None:
+                        profile.middlename = json_profile.get("middlename", None)
+                    if not json_profile.get("fathername", None) is None:
+                        profile.fathername = json_profile.get("fathername", None)
+                    if not json_profile.get("gender", None) is None:
+                        profile.gender = json_profile.get("gender", None)
+                    if not json_profile.get("nationality", None) is None:
+                        profile.nationality = json_profile.get("nationality", None)
+                    if not json_profile.get("ctc", None) is None:
+                        profile.ctc = json_profile.get("ctc", None)
+                    if not json_profile.get("ectc", None) is None:
+                        profile.ectc = json_profile.get("ectc", None)
+                    if not json_profile.get("totalexperience", None) is None:
+                        profile.totalexperience = json_profile.get("totalexperience", None)               
+                    if not json_profile.get("teachingsubject", None) is None:
+                        profile.teachingsubject = json_profile.get("teachingsubject", None)               
+                    if not json_profile.get("circulum", None) is None:
+                        profile.circulum = json_profile.get("circulum", None)              
+                    if not json_profile.get("currentorganization", None) is None:
+                        profile.currentorganization = json_profile.get("currentorganization", None)               
+                    if not json_profile.get("department", None) is None:
+                        profile.department = json_profile.get("department", None)              
+                    if not json_profile.get("qualification", None) is None:
+                        profile.qualification = json_profile.get("qualification", None)               
+                    if not json_profile.get("stateLocation", None) is None:
+                        profile.state = json_profile.get("stateLocation", None)
+                    if not json_profile.get("district", None) is None:
+                        profile.district = json_profile.get("district", None)
+                    if not json_profile.get("town", None) is None:
+                        profile.town = json_profile.get("town", None)
+                    if not json_profile.get("teachingmedium", None) is None:
+                        profile.teachingmedium = json_profile.get("teachingmedium", None)
+                    if not json_profile.get("segment", None) is None:
+                        profile.segment = json_profile.get("segment", None)
+                    if not json_profile.get("dob", None) is None:
+                        profile.dob = datetime.strptime(json_profile.get("dob", None), "%Y-%m-%dT%H:%M:%S.%fZ")
+                    if not json_profile.get("address", None) is None:
+                        profile.address = json_profile.get("address", None)
+                    if not json_profile.get("designation", None) is None:
+                        profile.designation = json_profile.get("designation", None)
+                    if not json_profile.get("pan", None) is None:
+                        profile.pan = json_profile.get("pan", None)
+
+                    db.session.add(profile)
+                    db.session.commit()
+                return profile
+            else:
+                return None
+
+        except Exception as e:
+            return None, e
+    
+    def serialize(self):
+        json_user = {
+            "id": self.id,
+            "userid": self.userid,
+            "firstname": self.firstname,
+            "middlename": self.middlename,
+            "lastname": self.lastname,
+            "fullname": self.fullname(),
+            "fathername": self.fathername,
+            "gender": self.gender,
+            "nationality": self.nationality,
+            "dob": "{}".format(self.dob),
+            "address": self.address,
+            "pan" : self.pan,
+            "designation":self.designation,
+            "ctc": self.ctc,
+            "ectc": self.ectc,
+            "teachingsubject": self.teachingsubject,
+            "district": self.district,
+            "stateLocation": self.state,
+			"town": self.town,
+            "qualification": self.qualification,
+            "totalexperience": self.totalexperience,
+            "circulum": self.circulum,
+            "teachingmedium": self.teachingmedium,
+            "currentorganization": self.currentorganization,
+            "segment": self.segment,
+            "department": self.department
+        }        
+        return json_user
+
+    def serialize_without_roles(self):
+        json_user = {
+            "id": self.id,
+            "userid": self.userid,
+            "firstname": self.firstname,
+            "middlename": self.middlename,
+            "lastname": self.lastname,
+            "fullname": self.fullname(),
+            "fathername": self.fathername,
+            "gender": self.gender,
+            "nationality": self.nationality,
+            "dob": self.dob.strftime("%d/%m/%Y"),
+            "address": self.address,
+            "pan" : self.pan,
+            "designation":self.designation,
+            "ctc": self.ctc,
+            "ectc": self.ectc,
+            "teachingsubject": Subjects.get_subject_from_id(self.teachingsubject).subject,
+            "district": Districts.get_district_from_id(self.district).district,
+            "stateLocation": States.get_state_from_id(self.state).state,
+			"town": Towns.get_town_from_id(self.town).town,
+            "qualification": Qualifications.get_qualification_from_id(self.qualification).qualification,
+            "totalexperience": self.totalexperience,
+            "circulum": self.circulum,
+            "teachingmedium": self.teachingmedium,
+            "currentorganization": self.currentorganization,
+            "segment": self.segment,
+            "department": self.department
+        }
+        return json_user
+
+    @classmethod
+    def serialize_view_userprofile(cls,userprofile_dict):
+        json_user = {
+            "id": userprofile_dict["id"],
+            "userid": userprofile_dict["userid"],
+            "firstname": userprofile_dict["firstname"],
+            "middlename": userprofile_dict["middlename"],
+            "lastname": userprofile_dict["lastname"],
+            "fullname": userprofile_dict["firstname"] + userprofile_dict["middlename"] + userprofile_dict["lastname"],
+            "fathername": userprofile_dict["fathername"],
+            "gender": userprofile_dict["gender"],
+            "nationality": userprofile_dict["nationality"],
+            "dob": datetime.strptime(userprofile_dict["dob"],'%Y-%m-%d %H:%M:%S.%f').strftime("%d-%B-%Y"),
+            "address": userprofile_dict["address"],
+            "pan" : userprofile_dict["pan"],
+            "designation":userprofile_dict["designation"],
+            "ctc": userprofile_dict["ctc"],
+            "ectc": userprofile_dict["ectc"],
+            "teachingsubject": Subjects.get_subject_from_id(userprofile_dict["teachingsubject"]).subject,
+            "district": Districts.get_district_from_id(userprofile_dict["district"]).district,
+            "stateLocation": States.get_state_from_id(userprofile_dict["state"]).state,
+			"town": Towns.get_town_from_id(userprofile_dict["town"]).town,
+            "qualification": Qualifications.get_qualification_from_id(userprofile_dict["qualification"]).qualification,
+            "totalexperience": userprofile_dict["totalexperience"],
+            "circulum": userprofile_dict["circulum"],
+            "teachingmedium": userprofile_dict["teachingmedium"],
+            "currentorganization": userprofile_dict["currentorganization"],
+            "segment": userprofile_dict["segment"],
+            "department": userprofile_dict["department"],
+            "email": userprofile_dict["email"],
+            "mobile":userprofile_dict["mobile"]
+        }
+        return json_user
+
+        
 
 class UsersAudit(db.Model):
     __tablename__ = "users_audit"

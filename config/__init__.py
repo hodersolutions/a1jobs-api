@@ -8,7 +8,7 @@
 # Copyright:   (c) Hoder Solutions Pvt Ltd 2018 - Present
 # Licence:   <your licence>
 ##########################################################################
-
+import os
 
 class DefaultConfig:
     """
@@ -25,17 +25,11 @@ class DefaultConfig:
         "password": "A1jobs@123"
     }
 
-    menu = {
+    menu = {}
 
+    permissions = {}
 
-    }
-
-    permissions = {
-        }
-
-    sql_filters = {
-
-    }
+    sql_filters = {}
 
     def __init__(self):
         pass
@@ -87,6 +81,7 @@ class StagingConfig(DefaultConfig):
     """
     staging environment variables
     """
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
 
     def __init__(self):
         pass
@@ -96,6 +91,7 @@ class ProductionConfig(DefaultConfig):
     """
     production environment config
     """
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
 
     def __init__(self):
         pass

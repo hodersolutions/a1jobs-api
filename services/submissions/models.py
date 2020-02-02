@@ -37,6 +37,33 @@ class JobApplications(db.Model):
         return application
 
     @classmethod
+    def get_application_from_id_user_id(cls, _id, _userid):
+        application = cls.query.filter_by(requisitionid=_id, userid=_userid).first()
+        return application
+        
+    
+    @classmethod
+    def get_requisitions_by_jobapplication_userid(classname, _userid):
+        query = "select * from {} where id in (select requisitionid from job_applications where userid = {})".format(Requisitions.__tablename__,_userid)
+        result = db.engine.execute(query)
+        list_result =[]
+        for requisition in result:
+            requisition_object = dict(zip(result.keys(), requisition))
+            list_result.append(Requisitions.serialize_dict(requisition_object))
+
+        return list_result
+
+    @classmethod
+    def get_appliedusers_by_requisitionid(classname, _requisitionid):
+        query = "select email from {} where id in ( select userid from job_applications where requisitionid = {})".format(Users.__tablename__,_requisitionid)
+        result = db.engine.execute(query)
+        list_result =[]
+        for email in result:
+            email_object = dict(zip(result.keys(), email))
+            list_result.append(email_object)
+        return list_result
+
+    @classmethod
     def delete_application_from_id(cls, id):
         application = cls.get_application_from_id(id)
         if application is None:

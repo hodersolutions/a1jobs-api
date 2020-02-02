@@ -15,13 +15,13 @@ from flask_jwt_extended import JWTManager
 from config import DefaultConfig
 
 
-app = Flask(__name__)
+application = Flask(__name__)
 # we need a .config file to store these values not a python class TODO
-app.config.from_object(DefaultConfig)
+application.config.from_object(DefaultConfig)
 
-cors = CORS(app)
-db = SQLAlchemy(app)
-jwt = JWTManager(app)
+cors = CORS(application)
+db = SQLAlchemy(application)
+jwt = JWTManager(application)
 
 
 from attributes.reservations.routes import reservations
@@ -32,22 +32,24 @@ from attributes.towns.routes import towns
 from attributes.districts.routes import districts
 from attributes.states.routes import states
 from attributes.jobtypes.routes import jobtypes
+from attributes.qualifications.routes import qualifications
 from logins.routes import logins
 from config.routes import config
 from main.routes import main
 from services.requisitions.routes import requisitions
 from services.submissions.routes import jobapplications
 
-app.register_blueprint(config)
-app.register_blueprint(logins)
-app.register_blueprint(main)
-app.register_blueprint(reservations)
-app.register_blueprint(religions)
-app.register_blueprint(subjects)
-app.register_blueprint(jobtypes)
-app.register_blueprint(institutions)
-app.register_blueprint(towns)
-app.register_blueprint(districts)
-app.register_blueprint(states)
-app.register_blueprint(requisitions)
-app.register_blueprint(jobapplications)
+application.register_blueprint(config)
+application.register_blueprint(logins)
+application.register_blueprint(main)
+application.register_blueprint(reservations)
+application.register_blueprint(religions)
+application.register_blueprint(subjects)
+application.register_blueprint(jobtypes)
+application.register_blueprint(institutions)
+application.register_blueprint(towns)
+application.register_blueprint(districts)
+application.register_blueprint(states)
+application.register_blueprint(qualifications)
+application.register_blueprint(requisitions)
+application.register_blueprint(jobapplications)
