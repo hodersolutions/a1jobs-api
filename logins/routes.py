@@ -39,20 +39,9 @@ def register():
                 'message': 'User Already exists with the Mobile.'
             }
             response = Response(dumps(result), 400, mimetype='application/json')
-            return response
-
-    new_user = Users()
-
-    if "email" in request_data:
-        new_user.email = request_data["email"]
-    if "mobile" in request_data:
-        new_user.mobile = request_data["mobile"]
-    if "password" in request_data:
-        new_user.password = Users.generate_hash(request_data["password"])
-    if "is_recruiter" in request_data:
-        new_user.is_recruiter = request_data["is_recruiter"]
+            return response    
     
-    success, error = Users.add_user(new_user)
+    success, error = Users.add_user(request_data)
     if success:
         result = {
             'status': 'success',

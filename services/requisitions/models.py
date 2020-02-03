@@ -83,7 +83,7 @@ class Requisitions(db.Model):
             requisition.institution = json_requisition.get("institution", None)
         if not json_requisition.get("recruiter", None) is None:
             user = Users.get_user_by_username(json_requisition.get("recruiter", None))
-            if not user is None:                
+            if not user is None:
                 requisition.recruiter = 1
         if not json_requisition.get("district", None) is None:
             requisition.district = json_requisition.get("district", None)

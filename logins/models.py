@@ -56,19 +56,27 @@ class Users(db.Model):
         return "{} {}".format(self.first_name, self.last_name)
 
     @classmethod
-    def add_user(cls, _user):
+    def add_user(cls, json_user):        
         try:
-            # pw_hash = cls.generate_hash(_user.password)
-            # _user.password = pw_hash
-            # _user.is_active = 1
-            db.session.add(_user)
+            _new_user = cls()
+
+            if not json_user.get("email", None) is None:
+                _new_user.email = json_user.get("email", None)
+            if not json_user.get("mobile", None) is None:
+                _new_user.mobile = json_user.get("mobile", None)
+            if not json_user.get("password", None) is None:
+                _new_user.password = cls.generate_hash(json_user.get("password", None))
+            if not json_user.get("is_recruiter", None) is None:
+                _new_user.is_recruiter = json_user.get("is_recruiter", None)
+                
+            db.session.add(_new_user)
             # add the role to the user before the db commit
-            # user_roles.UserRoles.add_user_role(_user.id, _role)
+            # user_roles.UserRoles.add_user_role(_new_user.id, _role)
             db.session.commit()
         except Exception as e:
             return None, e
 
-        return _user.serialize(), None
+        return _new_user.serialize(), None
 
     @classmethod
     def get_all_users(cls):
@@ -241,15 +249,15 @@ class UsersProfileBasic(db.Model):
         return "{} {} {}".format(self.firstname, self.middlename, self.lastname)
 
     @classmethod
-    def submit_profile_from_json(cls, json_profile):
-        profile = cls()
-        try:            
+    def submit_profile_from_json(cls, json_profile):        
+        profile = cls()        
+        try:
             if not json_profile.get("userid", None) is None:
-                profile.userid = int(json_profile.get("userid", None))
+                profile.userid = int(json_profile.get("userid", None))            
             if not json_profile.get("firstname", None) is None:
-                profile.firstname = json_profile.get("firstname", None)
+                profile.firstname = json_profile.get("firstname", None)            
             if not json_profile.get("lastname", None) is None:
-                profile.lastname = json_profile.get("lastname", None)
+                profile.lastname = json_profile.get("lastname", None)            
             if not json_profile.get("middlename", None) is None:
                 profile.middlename = json_profile.get("middlename", None)
             if not json_profile.get("fathername", None) is None:
@@ -283,9 +291,9 @@ class UsersProfileBasic(db.Model):
             if not json_profile.get("teachingmedium", None) is None:
                 profile.teachingmedium = json_profile.get("teachingmedium", None)
             if not json_profile.get("segment", None) is None:
-                profile.segment = json_profile.get("segment", None)
-            if not json_profile.get("dob", None) is None:
-                profile.dob = datetime.strptime(json_profile.get("dob", None), "%Y-%m-%dT%H:%M:%S.%fZ")
+                profile.segment = json_profile.get("segment", None)            
+            if not json_profile.get("dob", None) is None:                
+                profile.dob = datetime.strptime(json_profile.get("dob", None), "%m/%d/%Y")
             if not json_profile.get("address", None) is None:
                 profile.address = json_profile.get("address", None)
             if not json_profile.get("designation", None) is None:
@@ -313,15 +321,11 @@ class UsersProfileBasic(db.Model):
             userprofile_dict = dict(zip(result.keys(), userprofile))
             list_result.append(UsersProfileBasic.serialize_view_userprofile(userprofile_dict))
         return  list_result
-        # data = cls.query.all()
-        # for user in data:
-        #     result.append(user.serialize_without_roles())
-        # return result        
-
+        
     @classmethod
     def get_user_profile_by_userid(cls, _userid):
         try:
-            if not _userid is None:
+            if not _userid is None:                
                 profile = cls.query.filter_by(userid=_userid).first()
             return profile            
         except:
@@ -330,7 +334,7 @@ class UsersProfileBasic(db.Model):
     @classmethod
     def get_profile_joining_user_via_userid(cls, _userid):
         try:
-            query = "select  up.*,u.email,u.mobile from users_profile_basic up inner join users u on up.userid = u.id where up.userid = {}".format(_userid)
+            query = "select  up.*,u.email,u.mobile from users_profile_basic up inner join users u on up.userid = u.id where up.userid = {}".format(_userid)            
             result = db.engine.execute(query)
             if not result:
                 return None
@@ -367,12 +371,9 @@ class UsersProfileBasic(db.Model):
         result = db.engine.execute(query)
         if not result:
             return None
-        # list_result = []
         for userprofile in result:
             userprofile_dict = dict(zip(result.keys(), userprofile))
-            # UsersProfileBasic.serialize_view_userprofile(userprofile_dict)
         return  UsersProfileBasic.serialize_view_userprofile(userprofile_dict)
-        # user_object = cls.query.get(id)
 
     @classmethod
     def get_profile_joining_user_via(cls, id):
@@ -380,12 +381,9 @@ class UsersProfileBasic(db.Model):
         result = db.engine.execute(query)
         if not result:
             return None
-        # list_result = []
         for userprofile in result:
             userprofile_dict = dict(zip(result.keys(), userprofile))
-            # UsersProfileBasic.serialize_view_userprofile(userprofile_dict)
         return  UsersProfileBasic.serialize_view_userprofile(userprofile_dict)
-        # user_object = cls.query.get(id)
 
     @classmethod
     def delete_user_by_uid(cls, _id):
@@ -443,8 +441,8 @@ class UsersProfileBasic(db.Model):
                         profile.teachingmedium = json_profile.get("teachingmedium", None)
                     if not json_profile.get("segment", None) is None:
                         profile.segment = json_profile.get("segment", None)
-                    if not json_profile.get("dob", None) is None:
-                        profile.dob = datetime.strptime(json_profile.get("dob", None), "%Y-%m-%dT%H:%M:%S.%fZ")
+                    if not json_profile.get("dob", None) is None:                    
+                        profile.dob = datetime.strptime(json_profile.get("dob", None), "%m/%d/%Y")
                     if not json_profile.get("address", None) is None:
                         profile.address = json_profile.get("address", None)
                     if not json_profile.get("designation", None) is None:
@@ -503,7 +501,7 @@ class UsersProfileBasic(db.Model):
             "fathername": self.fathername,
             "gender": self.gender,
             "nationality": self.nationality,
-            "dob": self.dob.strftime("%d/%m/%Y"),
+            "dob": self.dob.strftime("%Y-%m-%d %H:%M:%S.%f"),
             "address": self.address,
             "pan" : self.pan,
             "designation":self.designation,
@@ -554,7 +552,7 @@ class UsersProfileBasic(db.Model):
             "department": userprofile_dict["department"],
             "email": userprofile_dict["email"],
             "mobile":userprofile_dict["mobile"]
-        }
+        }        
         return json_user
 
         
