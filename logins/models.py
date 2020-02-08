@@ -312,7 +312,7 @@ class UsersProfileBasic(db.Model):
     def get_all_user_profiles(cls, filter):
         if filter:
             return cls.query.filter_by('{} = {}'.format((key,value) for key,value in filter.items())).first()
-        query = "select  up.*,u.email,u.mobile from users_profile_basic up inner join users u on up.userid = u.id"
+        query = "select  up.*,u.email,u.mobile from users_profile_basic up inner join users u on up.userid = u.id and u.is_recruiter = 0"
         result = db.engine.execute(query)
         list_result = []
         if not result:
@@ -327,19 +327,22 @@ class UsersProfileBasic(db.Model):
         try:
             if not _userid is None:                
                 profile = cls.query.filter_by(userid=_userid).first()
-            return profile            
-        except:
-            return None
+            return profile, None
+
+        except Exception as e:
+            return None, e
+            
 
     @classmethod
     def get_profile_joining_user_via_userid(cls, _userid):
         try:
-            query = "select  up.*,u.email,u.mobile from users_profile_basic up inner join users u on up.userid = u.id where up.userid = {}".format(_userid)            
+            query = "select  up.*,u.email,u.mobile from users_profile_basic up inner join users u on up.userid = u.id where up.userid = {}".format(_userid)       
             result = db.engine.execute(query)
             if not result:
                 return None
             for userprofile in result:
                 userprofile_dict = dict(zip(result.keys(), userprofile))
+                res = UsersProfileBasic.serialize_view_userprofile(userprofile_dict)
             return  UsersProfileBasic.serialize_view_userprofile(userprofile_dict)        
         except:
             return None
@@ -422,7 +425,7 @@ class UsersProfileBasic(db.Model):
                     if not json_profile.get("totalexperience", None) is None:
                         profile.totalexperience = json_profile.get("totalexperience", None)               
                     if not json_profile.get("teachingsubject", None) is None:
-                        profile.teachingsubject = json_profile.get("teachingsubject", None)               
+                        profile.teachingsubject = json_profile.get("teachingsubject", None)              
                     if not json_profile.get("circulum", None) is None:
                         profile.circulum = json_profile.get("circulum", None)              
                     if not json_profile.get("currentorganization", None) is None:
@@ -441,8 +444,8 @@ class UsersProfileBasic(db.Model):
                         profile.teachingmedium = json_profile.get("teachingmedium", None)
                     if not json_profile.get("segment", None) is None:
                         profile.segment = json_profile.get("segment", None)
-                    if not json_profile.get("dob", None) is None:                    
-                        profile.dob = datetime.strptime(json_profile.get("dob", None), "%m/%d/%Y")
+                    if not json_profile.get("dob", None) is None:                
+                        profile.dob = datetime.strptime(json_profile.get("dob",None),"%Y-%m-%d %H:%M:%S")
                     if not json_profile.get("address", None) is None:
                         profile.address = json_profile.get("address", None)
                     if not json_profile.get("designation", None) is None:
@@ -452,9 +455,9 @@ class UsersProfileBasic(db.Model):
 
                     db.session.add(profile)
                     db.session.commit()
-                return profile
+                return profile, None
             else:
-                return None
+                return None, None
 
         except Exception as e:
             return None, e
@@ -523,13 +526,19 @@ class UsersProfileBasic(db.Model):
 
     @classmethod
     def serialize_view_userprofile(cls,userprofile_dict):
+        teachingsubject = "None" if userprofile_dict["teachingsubject"] == 0 else Subjects.get_subject_from_id(userprofile_dict["teachingsubject"]).subject
+        district = "None" if userprofile_dict["district"] == 0 else Districts.get_district_from_id(userprofile_dict["district"]).district
+        stateLocation = "None" if userprofile_dict["state"] == 0 else States.get_state_from_id(userprofile_dict["state"]).state
+        town = "None" if userprofile_dict["town"]==0 else Towns.get_town_from_id(userprofile_dict["town"]).town
+        qualification = "None" if userprofile_dict["qualification"] else Qualifications.get_qualification_from_id(userprofile_dict["qualification"]).qualification
+
         json_user = {
             "id": userprofile_dict["id"],
             "userid": userprofile_dict["userid"],
             "firstname": userprofile_dict["firstname"],
             "middlename": userprofile_dict["middlename"],
             "lastname": userprofile_dict["lastname"],
-            "fullname": userprofile_dict["firstname"] + userprofile_dict["middlename"] + userprofile_dict["lastname"],
+            "fullname": userprofile_dict["firstname"] +' ' + userprofile_dict["middlename"] + ' ' + userprofile_dict["lastname"],
             "fathername": userprofile_dict["fathername"],
             "gender": userprofile_dict["gender"],
             "nationality": userprofile_dict["nationality"],
@@ -539,11 +548,11 @@ class UsersProfileBasic(db.Model):
             "designation":userprofile_dict["designation"],
             "ctc": userprofile_dict["ctc"],
             "ectc": userprofile_dict["ectc"],
-            "teachingsubject": Subjects.get_subject_from_id(userprofile_dict["teachingsubject"]).subject,
-            "district": Districts.get_district_from_id(userprofile_dict["district"]).district,
-            "stateLocation": States.get_state_from_id(userprofile_dict["state"]).state,
-			"town": Towns.get_town_from_id(userprofile_dict["town"]).town,
-            "qualification": Qualifications.get_qualification_from_id(userprofile_dict["qualification"]).qualification,
+            "teachingsubject": teachingsubject,
+            "district": district,
+            "stateLocation": stateLocation,
+			"town": town,
+            "qualification": qualification,
             "totalexperience": userprofile_dict["totalexperience"],
             "circulum": userprofile_dict["circulum"],
             "teachingmedium": userprofile_dict["teachingmedium"],
@@ -552,7 +561,8 @@ class UsersProfileBasic(db.Model):
             "department": userprofile_dict["department"],
             "email": userprofile_dict["email"],
             "mobile":userprofile_dict["mobile"]
-        }        
+        }
+    
         return json_user
 
         

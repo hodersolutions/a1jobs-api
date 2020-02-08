@@ -104,9 +104,13 @@ class Requisitions(db.Model):
     @classmethod
     def get_requisitions_by_filter(classname, filter):
         if filter:
-            query = "select * from requisitions where "
+            query = "select * from requisitions where "            
             for key, value in filter.items():
-                query = "{} {} = {}".format(query, key, value)
+                if key == 'searchToken':
+                    query = "{} title like '%{}%' {}".format(query, value, ' and ')
+                else:    
+                    query = "{} {} = {} {}".format(query, key, value, ' and ')
+            query = query[:len(query)-5]
         else:
             query = "select * from requisitions where 1=1"
 

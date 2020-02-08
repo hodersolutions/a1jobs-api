@@ -12,6 +12,11 @@ from main import db
 from datetime import datetime
 from logins.models import Users
 from services.requisitions.models import Requisitions
+from attributes.qualifications.models import Qualifications
+from attributes.states.models import States
+from attributes.subjects.models import Subjects
+from attributes.districts.models import Districts
+from attributes.towns.models import Towns
 
 class JobApplications(db.Model):
     __tablename__ =  "job_applications"
@@ -55,12 +60,12 @@ class JobApplications(db.Model):
 
     @classmethod
     def get_appliedusers_by_requisitionid(classname, _requisitionid):
-        query = "select email from {} where id in ( select userid from job_applications where requisitionid = {})".format(Users.__tablename__,_requisitionid)
+        query = "select  up.*, u.email, u.mobile from users_profile_basic up inner join users u on up.userid = u.id where u.id in (select userid from job_applications where requisitionid = {})".format(_requisitionid)
         result = db.engine.execute(query)
         list_result =[]
-        for email in result:
-            email_object = dict(zip(result.keys(), email))
-            list_result.append(email_object)
+        for profile in result:
+            profile_object = dict(zip(result.keys(), profile))
+            list_result.append(JobApplications.serialize_view_userprofile(profile_object))
         return list_result
 
     @classmethod
@@ -87,3 +92,37 @@ class JobApplications(db.Model):
             'submission_date': self.submission_date
         }
         return json_application
+
+    @classmethod
+    def serialize_view_userprofile(cls,userprofile_dict):
+        json_user = {
+            "id": userprofile_dict["id"],
+            "userid": userprofile_dict["userid"],
+            "firstname": userprofile_dict["firstname"],
+            "middlename": userprofile_dict["middlename"],
+            "lastname": userprofile_dict["lastname"],
+            "fullname": userprofile_dict["firstname"] +' '+ userprofile_dict["middlename"] +' ' +userprofile_dict["lastname"],
+            "fathername": userprofile_dict["fathername"],
+            "gender": userprofile_dict["gender"],
+            "nationality": userprofile_dict["nationality"],
+            "dob": datetime.strptime(userprofile_dict["dob"],'%Y-%m-%d %H:%M:%S.%f').strftime("%d-%B-%Y"),
+            "address": userprofile_dict["address"],
+            "pan" : userprofile_dict["pan"],
+            "designation":userprofile_dict["designation"],
+            "ctc": userprofile_dict["ctc"],
+            "ectc": userprofile_dict["ectc"],
+            "teachingsubject": Subjects.get_subject_from_id(userprofile_dict["teachingsubject"]).subject,
+            "district": Districts.get_district_from_id(userprofile_dict["district"]).district,
+            "stateLocation": States.get_state_from_id(userprofile_dict["state"]).state,
+			"town": Towns.get_town_from_id(userprofile_dict["town"]).town,
+            "qualification": Qualifications.get_qualification_from_id(userprofile_dict["qualification"]).qualification,
+            "totalexperience": userprofile_dict["totalexperience"],
+            "circulum": userprofile_dict["circulum"],
+            "teachingmedium": userprofile_dict["teachingmedium"],
+            "currentorganization": userprofile_dict["currentorganization"],
+            "segment": userprofile_dict["segment"],
+            "department": userprofile_dict["department"],
+            "email": userprofile_dict["email"],
+            "mobile":userprofile_dict["mobile"]
+        }        
+        return json_user

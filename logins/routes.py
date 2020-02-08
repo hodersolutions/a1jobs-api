@@ -107,8 +107,8 @@ def logout():
 def api_add_profile():
     request_data = request.get_json()
     if(True):
-        profile = UsersProfileBasic.add_or_update_user_by_userid(request_data)        
-        if profile is None or profile.id < 0:
+        profile, error = UsersProfileBasic.add_or_update_user_by_userid(request_data)        
+        if error or profile is None or profile.id < 0:
             responseObject = {
                 "status": "failure",
                 "message": "Failed to add / update an Invalid Profile."
@@ -145,7 +145,7 @@ def api_get_profile():
         }
         return Response(dumps(result), 400, mimetype='application/json')
 
-    profile = UsersProfileBasic.get_user_profile_by_userid(userid)
+    profile, error = UsersProfileBasic.get_user_profile_by_userid(userid)
 
     if profile is None:
         result = {
