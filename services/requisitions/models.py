@@ -174,7 +174,7 @@ class Requisitions(db.Model):
             "gender": requisition_dict['gender'],
             "jobtype": requisition_dict['jobtype'],
             "submitter": requisition_dict['submitter'],
-            "registeredon":requisition_dict['registeredon'],
-            "closedon":requisition_dict['closedon']
+            "registeredon":requisition_dict['registeredon'].strftime("%d-%B-%Y"),
+            "closedon":requisition_dict['closedon'].strftime("%d-%B-%Y")
         }
         return json_requisition
