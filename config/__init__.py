@@ -16,7 +16,7 @@ class DefaultConfig:
     TODO: move this to a file, config.json?
     """
     JWT_SECRET_KEY = "a1jobs-hoder-api"
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')"
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     CORS_HEADERS = "Content-Type"
 
