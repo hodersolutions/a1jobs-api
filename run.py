@@ -10,8 +10,9 @@
 ##########################################################################
 from main import *
 
+db.create_all()
+
 if __name__ == "__main__":
-	db.create_all()
 	from tools import dbfill
 	dbfill.fill_reservations()
 	dbfill.fill_states()
