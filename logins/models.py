@@ -28,7 +28,7 @@ class Users(db.Model):
     # email of the user, cannot be null, and should be unique
     email = db.Column(db.String(80), nullable=True)
     # mobile number of the user
-    mobile = db.Column(db.String(80), nullable=True)
+    mobile = db.Column(db.String(20), nullable=True)
     # registration time
     creation_date = db.Column(db.DateTime, nullable=True, default=datetime.now())
     # If user is not with the Org anymore, TODO: use this effectively
