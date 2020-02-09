@@ -31,7 +31,7 @@ class Requisitions(db.Model):
     eduexpdetails = db.Column(db.String(2000), default="")
     minexperience = db.Column(db.Integer, default=0)
     maxexperience = db.Column(db.Integer, default=0)
-    telephone = db.Column(db.Integer, default=0)
+    telephone = db.Column(db.String(20), nullable=True)
     salary = db.Column(db.Integer, default=0)
     vacancy = db.Column(db.Integer, default=0)
     institution = db.Column(db.String(80), default="")
