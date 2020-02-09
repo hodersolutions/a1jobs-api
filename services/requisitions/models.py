@@ -31,7 +31,7 @@ class Requisitions(db.Model):
     eduexpdetails = db.Column(db.String(2000), default="")
     minexperience = db.Column(db.Integer, default=0)
     maxexperience = db.Column(db.Integer, default=0)
-    telephone = db.Column(db.Integer, default=0)
+    telephone = db.Column(db.String(20), nullable=True)
     salary = db.Column(db.Integer, default=0)
     vacancy = db.Column(db.Integer, default=0)
     institution = db.Column(db.String(80), default="")
@@ -174,7 +174,7 @@ class Requisitions(db.Model):
             "gender": requisition_dict['gender'],
             "jobtype": requisition_dict['jobtype'],
             "submitter": requisition_dict['submitter'],
-            "registeredon":requisition_dict['registeredon'],
-            "closedon":requisition_dict['closedon']
+            "registeredon":requisition_dict['registeredon'].strftime("%d-%B-%Y"),
+            "closedon":requisition_dict['closedon'].strftime("%d-%B-%Y")
         }
         return json_requisition
