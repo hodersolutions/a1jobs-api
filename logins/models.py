@@ -293,7 +293,7 @@ class UsersProfileBasic(db.Model):
             if not json_profile.get("segment", None) is None:
                 profile.segment = json_profile.get("segment", None)            
             if not json_profile.get("dob", None) is None:                
-                profile.dob = datetime.strptime(json_profile.get("dob", None), "%m/%d/%Y")
+                profile.dob = datetime.strptime(json_profile.get("dob", None), "%d/%m/%Y")
             if not json_profile.get("address", None) is None:
                 profile.address = json_profile.get("address", None)
             if not json_profile.get("designation", None) is None:
@@ -446,7 +446,7 @@ class UsersProfileBasic(db.Model):
                     if not json_profile.get("segment", None) is None:
                         profile.segment = json_profile.get("segment", None)
                     if not json_profile.get("dob", None) is None:                
-                        profile.dob = datetime.strptime(json_profile.get("dob",None),"%Y-%m-%d %H:%M:%S")
+                        profile.dob = datetime.strptime(json_profile.get("dob",None),"%d/%m/%Y")
                     if not json_profile.get("address", None) is None:
                         profile.address = json_profile.get("address", None)
                     if not json_profile.get("designation", None) is None:
@@ -505,7 +505,7 @@ class UsersProfileBasic(db.Model):
             "fathername": self.fathername,
             "gender": self.gender,
             "nationality": self.nationality,
-            "dob": self.dob.strftime("%Y-%m-%d %H:%M:%S.%f"),
+            "dob": self.dob.strftime("%d/%m/%Y"),
             "address": self.address,
             "pan" : self.pan,
             "designation":self.designation,
@@ -543,7 +543,7 @@ class UsersProfileBasic(db.Model):
             "fathername": userprofile_dict["fathername"],
             "gender": userprofile_dict["gender"],
             "nationality": userprofile_dict["nationality"],
-            "dob": datetime.strptime(userprofile_dict["dob"],'%Y-%m-%d %H:%M:%S.%f').strftime("%d-%B-%Y"),
+            "dob": datetime.strptime(userprofile_dict["dob"],'%d/%m/%Y'),
             "address": userprofile_dict["address"],
             "pan" : userprofile_dict["pan"],
             "designation":userprofile_dict["designation"],
