@@ -32,7 +32,7 @@ class Users(db.Model):
     # registration time
     creation_date = db.Column(db.DateTime, nullable=True, default=datetime.now())
     # If user is not with the Org anymore, TODO: use this effectively
-    is_active = db.Column(db.Boolean, nullable=True, default=1)
+    is_active = db.Column(db.Boolean, nullable=True, default=True)
     # Is the user a recruiter
     is_recruiter = db.Column(db.Boolean, nullable=True)
     # Basic profiles
