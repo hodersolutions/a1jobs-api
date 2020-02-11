@@ -306,7 +306,7 @@ class UsersProfileBasic(db.Model):
         except Exception as e:
             return None, e
 
-        return cls.get_user_profile_by_userid(profile.userid)
+        return cls.get_user_profile_by_userid(profile.userid), None
 
     @classmethod
     def get_all_user_profiles(cls, filter):
@@ -403,8 +403,9 @@ class UsersProfileBasic(db.Model):
         try: 
             if not json_profile.get("userid", None) is None:                
                 profile = cls.query.filter_by(userid=int(json_profile.get("userid"))).first()
+		error = None
                 if profile is None:
-                    profile = cls.submit_profile_from_json(json_profile)                  
+                    profile, error = cls.submit_profile_from_json(json_profile)                  
                 else:
                     if not json_profile.get("firstname", None) is None:
                         profile.firstname = json_profile.get("firstname", None)
@@ -455,7 +456,7 @@ class UsersProfileBasic(db.Model):
 
                     db.session.add(profile)
                     db.session.commit()
-                return profile, None
+                return profile, error
             else:
                 return None, None
 
