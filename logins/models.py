@@ -342,7 +342,9 @@ class UsersProfileBasic(db.Model):
                 return None
             for userprofile in result:
                 userprofile_dict = dict(zip(result.keys(), userprofile))
+		print(userprofile_dict)
                 res = UsersProfileBasic.serialize_view_userprofile(userprofile_dict)
+		print(res)
             return  UsersProfileBasic.serialize_view_userprofile(userprofile_dict)        
         except:
             return None
