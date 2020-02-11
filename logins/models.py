@@ -342,9 +342,9 @@ class UsersProfileBasic(db.Model):
                 return None
             for userprofile in result:
                 userprofile_dict = dict(zip(result.keys(), userprofile))
-		print(userprofile_dict)
+                print(userprofile_dict)
                 res = UsersProfileBasic.serialize_view_userprofile(userprofile_dict)
-		print(res)
+                print(res)
             return  UsersProfileBasic.serialize_view_userprofile(userprofile_dict)        
         except:
             return None
@@ -565,7 +565,7 @@ class UsersProfileBasic(db.Model):
             "email": userprofile_dict["email"],
             "mobile":userprofile_dict["mobile"]
         }
-    
+        print(json_user)
         return json_user
 
         
