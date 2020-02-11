@@ -474,7 +474,7 @@ class UsersProfileBasic(db.Model):
             "fathername": self.fathername,
             "gender": self.gender,
             "nationality": self.nationality,
-            "dob": "{}".format(self.dob),
+            "dob": self.dob.strftime("%d/%m/%Y"),
             "address": self.address,
             "pan" : self.pan,
             "designation":self.designation,
