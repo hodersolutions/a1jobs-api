@@ -28,8 +28,7 @@ from logins.models import Users
 def fill_districts():
 	if len(Districts.query.all()) > 0:
 		return
-	df = pd.read_json('./tools/data/ap_districts.json')
-	df.index = range(1, len(df) + 1)
+	df = pd.read_json('./tools/data/ap_districts.json')	
 	df.index.rename("id", inplace=True)
 	df.to_sql(name='districts', if_exists='append', con=db.engine)
 
@@ -37,8 +36,7 @@ def fill_districts():
 def fill_job_types():
 	if len(JobTypes.query.all()) > 0:
 		return
-	df = pd.read_json('./tools/data/job_types.json')
-	df.index = range(1, len(df) + 1)
+	df = pd.read_json('./tools/data/job_types.json')	
 	df.index.rename("id", inplace=True)
 	df.to_sql(name='job_types', if_exists='append', con=db.engine)
 
@@ -47,7 +45,6 @@ def fill_qualifications():
 	if len(Qualifications.query.all()) > 0:
 		return
 	df = pd.read_json('./tools/data/qualifications.json')
-	df.index = range(1, len(df) + 1)
 	df.index.rename("id", inplace=True)
 	df.to_sql(name='qualifications', if_exists='append', con=db.engine)
 
@@ -55,8 +52,7 @@ def fill_qualifications():
 def fill_towns():
 	if len(Towns.query.all()) > 0:
 		return
-	df = pd.read_json('./tools/data/ap_towns.json')
-	df.index = range(1, len(df) + 1)
+	df = pd.read_json('./tools/data/ap_towns.json')	
 	df.index.rename("id", inplace=True)
 	df.to_sql(name='towns', if_exists='append', con=db.engine)
 
@@ -64,8 +60,7 @@ def fill_towns():
 def fill_states():
 	if len(States.query.all()) > 0:
 		return
-	df = pd.read_json('./tools/data/states.json')
-	df.index = range(1, len(df) + 1)
+	df = pd.read_json('./tools/data/states.json')	
 	df.index.rename("id", inplace=True)
 	df.to_sql(name='states', if_exists='append', con=db.engine)
 
@@ -73,8 +68,7 @@ def fill_states():
 def fill_institutions():
 	if len(Institutions.query.all()) > 0:
 		return
-	df = pd.read_json('./tools/data/institutions.json')
-	df.index = range(1, len(df) + 1)
+	df = pd.read_json('./tools/data/institutions.json')	
 	df.index.rename("id", inplace=True)
 	df.to_sql(name='institutions', if_exists='append', con=db.engine)
 
@@ -82,8 +76,7 @@ def fill_institutions():
 def fill_subjects():
 	if len(Subjects.query.all()) > 0:
 		return
-	df = pd.read_json('./tools/data/subjects.json')
-	df.index = range(1, len(df) + 1)
+	df = pd.read_json('./tools/data/subjects.json')	
 	df.index.rename("id", inplace=True)
 	df.to_sql(name='subjects', if_exists='append', con=db.engine)
 
@@ -101,7 +94,6 @@ def fill_reservations():
 	if len(Reservations.query.all()) > 0:
 		return
 	df = pd.read_json('./tools/data/reservations.json')
-	df.index = range(1, len(df) + 1)
 	df.index.rename("id", inplace=True)
 	df.to_sql(name='reservations', if_exists='append', con=db.engine)
 
@@ -110,7 +102,6 @@ def fill_religions():
 	if len(Religions.query.all()) > 0:
 		return
 	df = pd.read_json('./tools/data/religions.json')
-	df.index = range(1, len(df) + 1)
 	df.index.rename("id", inplace=True)
 	df.to_sql(name='religions', if_exists='append', con=db.engine)
 
@@ -128,7 +119,6 @@ def fill_users():
 	if len(Users.query.all()) > 0:
 		return
 	df = pd.read_json('./tools/data/users.json')
-	df.index = range(1, len(df) + 1)
 	df.index.rename("id", inplace=True)
 	df.to_sql(name='users', if_exists='append', con=db.engine)
 
