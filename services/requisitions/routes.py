@@ -62,8 +62,8 @@ def api_requisition():
 def api_add_requisition():
     request_data = request.get_json()
     if(True):
-        requisition = Requisitions.submit_requisition_from_json(request_data)
-        if requisition is None or requisition.id < 0:
+        requisition, error = Requisitions.submit_requisition_from_json(request_data)
+        if error or requisition is None or requisition.id < 0:
             responseObject = {
                 "status": "failure",
                 "message": "Failed to add an Invalid Requisition."
