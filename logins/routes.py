@@ -109,6 +109,7 @@ def api_add_profile():
     if(True):
         profile, error = UsersProfileBasic.add_or_update_user_by_userid(request_data)        
         if error or profile is None or profile.id < 0:
+            print(error)
             responseObject = {
                 "status": "failure",
                 "message": "Failed to add / update an Invalid Profile."
