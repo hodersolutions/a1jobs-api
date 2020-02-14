@@ -20,6 +20,6 @@ main = Blueprint('main', __name__)
 def index():
     """
     default pages
-    :return: Hello World
+    :return: Welcome to A1JOBS-API v1
     """
-    return jsonify({'message': 'Hello, World!'})
+    return jsonify({'message': 'Hi all, Welcome to A1JOBS-API v1'})
