@@ -338,7 +338,7 @@ class UsersProfileBasic(db.Model):
         except Exception as e:
             return None, e
 
-        return cls.get_user_profile_by_userid(profile.userid), None
+        return cls.get_user_profile_by_userid(profile.userid)
 
     @classmethod
     def get_all_user_profiles(cls, filter):
@@ -359,6 +359,8 @@ class UsersProfileBasic(db.Model):
         try:
             if not _userid is None:
                 profile = cls.query.filter_by(userid=_userid).first()
+            else:
+                return None, None
             return profile, None
 
         except Exception as e:
@@ -434,9 +436,8 @@ class UsersProfileBasic(db.Model):
         try: 
             if not json_profile.get("userid", None) is None:
                 profile = cls.query.filter_by(userid=int(json_profile.get("userid"))).first()
-                error = None
-                if profile is None:
-                    profile, error = cls.submit_profile_from_json(json_profile)
+                if profile is None:                    
+                    return cls.submit_profile_from_json(json_profile)
                 else:
                     if not json_profile.get("firstname", None) is None:
                         profile.firstname = json_profile.get("firstname", None)
@@ -518,7 +519,7 @@ class UsersProfileBasic(db.Model):
 
                     db.session.add(profile)
                     db.session.commit()
-                return profile, error
+                return profile, None
             else:
                 return None, None
 
@@ -545,7 +546,7 @@ class UsersProfileBasic(db.Model):
             "teachingsubject": self.teachingsubject,
             "district": self.district,
             "stateLocation": self.state,
-            "town": self.town,
+			"town": self.town,
             "qualification": self.qualification,
             "totalexperience": self.totalexperience,
             "circulum": self.circulum,
@@ -576,7 +577,7 @@ class UsersProfileBasic(db.Model):
             "teachingsubject": Subjects.get_subject_from_id(self.teachingsubject).subject,
             "district": Districts.get_district_from_id(self.district).district,
             "stateLocation": States.get_state_from_id(self.state).state,
-			      "town": Towns.get_town_from_id(self.town).town,
+			"town": Towns.get_town_from_id(self.town).town,
             "qualification": Qualifications.get_qualification_from_id(self.qualification).qualification,
             "totalexperience": self.totalexperience,
             "circulum": self.circulum,
@@ -614,7 +615,7 @@ class UsersProfileBasic(db.Model):
             "teachingsubject": teachingsubject,
             "district": district,
             "stateLocation": stateLocation,
-			      "town": town,
+			"town": town,
             "qualification": qualification,
             "totalexperience": userprofile_dict["totalexperience"],
             "circulum": userprofile_dict["circulum"],
