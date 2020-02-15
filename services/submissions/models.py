@@ -105,7 +105,7 @@ class JobApplications(db.Model):
             "fathername": userprofile_dict["fathername"],
             "gender": userprofile_dict["gender"],
             "nationality": userprofile_dict["nationality"],
-            "dob": datetime.strptime(userprofile_dict["dob"],'%Y-%m-%d %H:%M:%S.%f').strftime("%d-%B-%Y"),
+            "dob": userprofile_dict["dob"].strftime("%d/%m/%Y"),
             "address": userprofile_dict["address"],
             "pan" : userprofile_dict["pan"],
             "designation":userprofile_dict["designation"],
